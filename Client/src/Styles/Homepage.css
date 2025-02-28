@@ -1,0 +1,39 @@
+.Categories-Component {
+    background-color: #A98AC0;
+}
+
+/* Apply the Lora font to all h1 and h2 elements */
+h1,
+h2 {
+    font-family: 'Lora', serif;
+    font-weight: 700;
+}
+
+h1 {
+    font-size: 2.5rem;
+    color: #333;
+}
+
+h2 {
+    font-size: 2rem;
+    color: #555;
+    font-weight: 500;
+}
+
+.carousel-caption {
+    background: rgba(0, 0, 0, 0.6); /* Semi-transparent background */
+    padding: 1rem;
+    border-radius: 10px;
+  }
+  
+  .carousel-item img {
+    object-fit: cover; /* Ensure images cover the container */
+    height: 450px; /* Set a uniform height */
+  }
+  
+  @media (max-width: 768px) {
+    .carousel-item img {
+      height: 250px;
+    }
+  }
+  

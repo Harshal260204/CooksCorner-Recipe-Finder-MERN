@@ -1,0 +1,23 @@
+.card {
+    background: linear-gradient(145deg, #ffffff, #f1f1f1);
+    box-shadow: 5px 5px 10px #b1b1b1, -5px -5px 10px #ffffff;
+}
+
+form label {
+    color: #6A1E55;
+    font-weight: bold;
+}
+
+input {
+    border: 1px solid #6A1E55;
+    border-radius: 10px;
+}
+
+input:focus {
+    box-shadow: 0 0 5px #6A1E55;
+    border-color: #CB9DF0;
+}
+
+.btn:hover {
+    background-color: #CB9DF0;
+}
