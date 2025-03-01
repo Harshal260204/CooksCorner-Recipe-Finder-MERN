@@ -16,5 +16,5 @@ userRouter.post("/user-login", loginUser);
 userRouter.get("/all-users", getAllUsers);
 userRouter.put("/update-user/:id", updateUser);
 userRouter.delete("/delete-user/:id", deleteUser);
-
+  
 export default userRouter;

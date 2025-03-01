@@ -1,6 +1,16 @@
 import recipe from "../models/recipeModel.js";
 import user from "../models/userModel.js";
 
+// Get All Recipes :
+export const getAllRecipes = async (req, res) => {
+  try {
+    const recipes = await recipe.find();
+    res.status(200).json({ recipes });
+  } catch (error) {
+    res.status(400).json({ message: "Server Error" });
+  }
+};
+
 // Create Recipes :
 export const createRecipe = async (req, res) => {
   try {
@@ -92,6 +102,23 @@ export const updateRecipe = async (req, res) => {
     }
 
     res.status(200).json({ message: "Recipe Updated Successfully" });
+  } catch (error) {
+    res.status(500).json({ message: "Server Error" });
+  }
+};
+
+// Delete Recipes :
+export const deleteRecipe = async (req, res) => {
+  try {
+    const { id } = req.params;
+
+    const deleteTheRecipe = await recipe.findByIdAndDelete(id);
+
+    if (!deleteTheRecipe) {
+      res.status(400).json({ message: "Recipe Not Found" });
+    }
+
+    res.status(200).json({ message: "Recipe Deleted" });
   } catch (error) {
     res.status(500).json({ message: "Server Error" });
   }
