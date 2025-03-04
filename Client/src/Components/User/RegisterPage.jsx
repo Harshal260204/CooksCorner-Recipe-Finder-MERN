@@ -67,9 +67,9 @@ function RegisterPage() {
   };
 
   return (
-    <div className="container mt-5 d-flex justify-content-center">
+    <div className="container mx-auto my-3 d-flex justify-content-center">
       <div className="card p-4 shadow-lg" style={{ maxWidth: '400px', width: '100%', borderRadius: '20px' }}>
-        <h3 className="text-center mb-4" style={{ color: '#6A1E55', fontWeight: 'bold' }}>Register</h3>
+        <h3 className="text-center mb-4" style={{ color: '#626F47', fontWeight: 'bold' }}>Register</h3>
         <form onSubmit={handleSubmit}>
           <div className="mb-3">
             <label htmlFor="username" className="form-label">Username</label>
@@ -77,7 +77,7 @@ function RegisterPage() {
               type="text"
               className={`form-control ${errors.username? "is-Invalid": ""}`}
               id="username"
-              name="username"
+              name="username" 
               placeholder="Enter your name"
               value={formData.username}
               onChange={handleChange}
@@ -123,10 +123,10 @@ function RegisterPage() {
               required
             />
           </div>
-          <button type="submit" className="btn w-100" style={{ backgroundColor: '#6A1E55', color: 'white' }}>Register</button>
+          <button type="submit" className="btn w-100" style={{ backgroundColor: '#626F47', color: 'white' }}>Register</button>
         </form>
         <div className="text-center mt-3">
-          <p>Already have an account? <a href="/LoginForm" className="text-decoration-none" style={{ color: '#CB9DF0' }}>Login</a></p>
+          <p>Already have an account? <a href="/LoginForm" className="text-decoration-none" style={{ color: '#000000' }}>Login</a></p>
         </div>
       </div>
     </div>

@@ -7,11 +7,12 @@ import { BrowserRouter, Route, Routes } from 'react-router-dom'
 import Footer from './Components/User/Footer'
 import CookBooks from './Pages/User/CookBooks'
 import Recipes from './Pages/User/Recipes'
-import SavedRecipes from './Pages/User/SavedRecipes'
-import Admin from './Pages/Admin/Admin'
+import Admin from './Pages/Admin/AdminDashboard'
 import AdminDashboard from './Pages/Admin/AdminDashboard'
-import CreateRecipe from './Pages/Admin/CreateRecipe'
 import CartPage from './Pages/User/CartPage'
+import ContactUs from './Pages/User/ContactUs'
+import CreateRecipeForm from './Components/Admin/CreateRecipeForm'
+import UsersList from './Components/Admin/UsersList'
 
 function App() {
 
@@ -24,13 +25,14 @@ function App() {
         <Route path='/register-page' element={<RegisterPage />} />
         <Route path='/recipes' element={<Recipes />} />
         <Route path='/premium-cookbooks' element={<CookBooks />} />
-        <Route path='/saved-recipes' element={<SavedRecipes />} />
         <Route path='/cart' element={<CartPage />} />
+        <Route path='/contact-us' element={<ContactUs />} />
 
         {/* Nested Routes For Admin */}
         <Route path='/admin' element={<Admin />}>
           <Route path='admin-dashboard' element={<AdminDashboard />} />
-          <Route path='create-recipe' element={<CreateRecipe />} />
+          <Route path='create-recipe' element={<CreateRecipeForm />} />
+          <Route path='all-users' element={<UsersList />} />
         </Route>
       </Routes>
       <Footer />

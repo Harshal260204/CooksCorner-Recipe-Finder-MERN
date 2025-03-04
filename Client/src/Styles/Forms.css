@@ -4,20 +4,20 @@
 }
 
 form label {
-    color: #6A1E55;
+    color: #626F47;
     font-weight: bold;
 }
 
 input {
-    border: 1px solid #6A1E55;
+    border: 1px solid #626F47;
     border-radius: 10px;
 }
 
 input:focus {
-    box-shadow: 0 0 5px #6A1E55;
-    border-color: #CB9DF0;
+    box-shadow: 0 0 5px #626F47;
+    border-color: #626F47;
 }
 
 .btn:hover {
-    background-color: #CB9DF0;
+    background-color: #626F47;
 }

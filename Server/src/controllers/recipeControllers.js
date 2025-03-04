@@ -11,6 +11,30 @@ export const getAllRecipes = async (req, res) => {
   }
 };
 
+// Get Recipes By Veg / Non Veg ()
+export const getRecipeByType = async (req, res) => {
+  try {
+    const { type } = req.params;
+
+    if (!type) {
+      res.status(400).json({ message: "Enter The Type" });
+    }
+
+    const recipes = await recipe.find({ type: type });
+
+    if (recipes.length === 0) {
+      res.status(400).json({ message: `No ${type} Recipes Found` });
+    }
+
+    res
+      .status(200)
+      .json({ data: recipes, message: `${type} Recipes Are Fetched!` });
+  } catch (error) {
+    console.log(error);
+    res.json(500).json({ message: "Server Error" });
+  }
+};
+
 // Create Recipes :
 export const createRecipe = async (req, res) => {
   try {
@@ -25,28 +49,38 @@ export const createRecipe = async (req, res) => {
     } = req.body;
 
     if (!name) {
-      res.status(400).json({ message: "Enter The Name Of The Recipe" });
+      return res.status(400).json({ message: "Enter The Name Of The Recipe" });
     }
     if (!description) {
-      res.status(400).json({ message: "Enter The Desciprtion Of The Recipe" });
+      return res
+        .status(400)
+        .json({ message: "Enter The Description Of The Recipe" });
     }
     if (!category) {
-      res.status(400).json({ message: "Enter The Category Of The Recipe" });
+      return res
+        .status(400)
+        .json({ message: "Enter The Category Of The Recipe" });
     }
     if (!type) {
-      res.status(400).json({ message: "Enter The Type Of The Recipe" });
+      return res.status(400).json({ message: "Enter The Type Of The Recipe" });
     }
     if (!ingredients) {
-      res.status(400).json({ message: "Enter The Ingredients Of The Recipe" });
+      return res
+        .status(400)
+        .json({ message: "Enter The Ingredients Of The Recipe" });
     }
     if (!instructions) {
-      res.status(400).json({ message: "Enter The Instructions Of The Recipe" });
+      return res
+        .status(400)
+        .json({ message: "Enter The Instructions Of The Recipe" });
     }
     if (!cookingTime) {
-      res.status(400).json({ message: "Enter The Cooking Time Of The Recipe" });
+      return res
+        .status(400)
+        .json({ message: "Enter The Cooking Time Of The Recipe" });
     }
 
-    const Recipe = new recipe({
+    const newRecipe = new recipe({
       name,
       description,
       category,
@@ -56,10 +90,11 @@ export const createRecipe = async (req, res) => {
       cookingTime,
     });
 
-    await Recipe.save();
-    res.status(201).json({ message: "Recipe Created Succesfully" });
+    await newRecipe.save();
+    return res.status(201).json({ message: "Recipe Created Successfully" });
   } catch (error) {
-    res.status(500).json({ message: "Server Error" });
+    console.log(error);
+    return res.status(500).json({ message: "Server Error" });
   }
 };
 

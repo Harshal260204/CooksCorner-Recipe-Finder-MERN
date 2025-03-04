@@ -77,7 +77,7 @@ function LoginForm() {
   return (
     <div className="container mt-5 d-flex justify-content-center">
       <div className="card p-4 shadow-lg" style={{ maxWidth: '400px', width: '100%', borderRadius: '20px' }}>
-        <h3 className="text-center mb-4" style={{ color: '#6A1E55', fontWeight: 'bold' }}>Login</h3>
+        <h3 className="text-center mb-4" style={{ color: '#626F47', fontWeight: 'bold' }}>Login</h3>
         <form onSubmit={handleSubmit}>
           <div className="mb-3">
             <label htmlFor="email" className="form-label">Email Address</label>
@@ -105,7 +105,7 @@ function LoginForm() {
               required
             />
           </div>
-          <button type="submit" className="btn w-100" style={{ backgroundColor: '#6A1E55', color: 'white' }}>Login</button>
+          <button type="submit" className="btn w-100" style={{ backgroundColor: '#626F47', color: 'white' }}>Login</button>
         </form>
         <div className="text-center mt-3">
           <p>Don't have an account? <a href="/RegisterForm" className="text-decoration-none" style={{ color: '#CB9DF0' }}>Register</a></p>

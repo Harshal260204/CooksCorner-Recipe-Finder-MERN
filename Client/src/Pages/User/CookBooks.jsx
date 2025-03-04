@@ -1,5 +1,4 @@
 import React from 'react';
-import '../../Styles/Cookbooks.css'
 import { assets } from '../../assets/assets';
 import { useDispatch, useSelector } from 'react-redux';
 import { addToCart } from '../../Store/cartSlice';
@@ -57,17 +56,77 @@ const CookbookCard = () => {
   console.log(selector);
 
   return (
-    <div className="d-flex flex-wrap justify-content-center content" style={{ background: '#F0C1E1', padding: '20px' }}>
+    <div className="d-flex flex-wrap justify-content-center content">
       {cookbooks.map(book => (
-        <div key={book.id} className="card m-3" style={{ width: '18rem', border: 'none', borderRadius: '12px', overflow: 'hidden', backgroundColor: '#fff', boxShadow: '0 8px 16px rgba(0, 0, 0, 0.1)', transition: 'transform 0.3s ease, box-shadow 0.3s ease' }}>
-          <img src={book.img} className="card-img-top" alt={book.name} style={{ height: '200px', objectFit: 'cover' }} />
-          <div className="card-body" style={{ padding: '1.2rem', backgroundColor: '#F9D9E1', color: '#2b2d42', textAlign: 'center' }}>
-            <h5 className="BookName" style={{ fontSize: '1.1rem', fontWeight: '600', color: '#6A4C93', textTransform: 'uppercase' }}>{book.name}</h5>
-            <p className="card-text" style={{ fontSize: '14px', color: '#2b2d42', height: '40px', overflow: 'hidden', textOverflow: 'ellipsis', display: '-webkit-box', WebkitLineClamp: 2, WebkitBoxOrient: 'vertical' }}>{book.description}</p>
-            <p className="card-price" style={{ fontSize: '16px', fontWeight: 'bold', color: '#000' }}>{book.price}</p>
+        <div key={book.id} className="card m-3" style={{
+          width: "18rem",
+          border: "none",
+          borderRadius: "12px",
+          overflow: "hidden",
+          backgroundColor: "#DDEB9D",  // Matching top recipe card background color
+          boxShadow: "0 8px 16px rgba(0, 0, 0, 0.1)",
+          transition: "transform 0.3s ease, box-shadow 0.3s ease",
+        }}>
+          <img src={book.img} className="card-img-top" alt={book.name} style={{
+            height: "200px",
+            objectFit: "cover"
+          }} />
+          <div className="card-body" style={{
+            padding: "1.2rem",
+            backgroundColor: "#DDEB9D", // Consistent background color
+            color: "#2b2d42",
+          }}>
+            <h5 className="BookName" style={{
+              fontSize: "1.1rem",
+              fontWeight: "600",
+              color: "#626F47",  // Consistent color
+            }}>
+              {book.name}
+            </h5>
+            <p className="card-text" style={{
+              fontSize: "14px",
+              color: "#2b2d42",
+              height: "40px",
+              overflow: "hidden",
+              textOverflow: "ellipsis",
+              display: "-webkit-box",
+              WebkitLineClamp: 2,
+              WebkitBoxOrient: "vertical",
+            }}>
+              {book.description}
+            </p>
+            <p className="card-price" style={{
+              fontSize: "16px",
+              fontWeight: "bold",
+              color: "#000"
+            }}>
+              {book.price}
+            </p>
             <div className="d-flex justify-content-between align-items-center mt-3">
-              <button className="btn" onClick={() => dispatch(addToCart(book))} style={{ backgroundColor: '#D1A9F7', color: '#fff', borderRadius: '25px', padding: '0.5rem 1rem', textTransform: 'uppercase', fontWeight: 'bold', border: 'none', cursor: 'pointer' }}>Add to Cart</button>
-              <button className="btn" style={{ color: '#F8E1D7', backgroundColor: '#2b2d42', borderRadius: '25px', padding: '0.5rem 1rem', textTransform: 'uppercase', fontWeight: 'bold', border: 'none', cursor: 'pointer' }}>Buy Now</button>
+              <button className="btn" onClick={() => dispatch(addToCart(book))} style={{
+                backgroundColor: "#626F47",  // Green button
+                color: "#fff",
+                borderRadius: "25px",
+                padding: "0.5rem 1rem",
+                textTransform: "uppercase",
+                fontWeight: "bold",
+                border: "none",
+                cursor: "pointer",
+              }}>
+                Add to Cart
+              </button>
+              <button className="btn" style={{
+                backgroundColor: "#626F47",  // Green button
+                color: "#fff",
+                borderRadius: "25px",
+                padding: "0.5rem 1rem",
+                textTransform: "uppercase",
+                fontWeight: "bold",
+                border: "none",
+                cursor: "pointer",
+              }}>
+                Buy Now
+              </button>
             </div>
           </div>
         </div>

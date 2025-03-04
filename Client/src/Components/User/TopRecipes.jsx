@@ -1,7 +1,5 @@
 import React from "react";
-import '../../Styles/TopRecipes.css'
 import { assets } from "../../assets/assets";
-import Button from "./Button";
 
 export default function RecipeCard() {
 
@@ -65,7 +63,7 @@ export default function RecipeCard() {
   ];
 
   return (
-    <div className="d-flex flex-wrap justify-content-center content">
+    <div className="d-flex flex-wrap justify-content-center content" style={{}}>
       {topRecipes.map((recipe) => (
         <div
           className="card m-3"
@@ -74,7 +72,7 @@ export default function RecipeCard() {
             border: "none",
             borderRadius: "12px",
             overflow: "hidden",
-            backgroundColor: "#fff",
+            backgroundColor: "#DDEB9D",  // Card background color
             boxShadow: "0 8px 16px rgba(0, 0, 0, 0.1)",
             transition: "transform 0.3s ease, box-shadow 0.3s ease",
           }}
@@ -87,20 +85,21 @@ export default function RecipeCard() {
             style={{
               height: "200px",
               objectFit: "cover",
+              textAlign: "center"
             }}
           />
           <div
             className="card-body"
             style={{
               padding: "1.2rem",
-              backgroundColor: "#F9D9E1",
+              backgroundColor: "#DDEB9D",  // Updated background color to match the card
               color: "#2b2d42",
             }}
           >
-            <h5 className="RecipeName" style={{ fontSize: "1.1rem", fontWeight: "600", color: "#6A4C93" }}>
+            <h5 className="RecipeName" style={{ fontSize: "1.1rem", fontWeight: "600", color: "#626F47" }}>
               {recipe.name}
             </h5>
-            <h6 className="RecipeType" style={{ fontSize: "1rem", color: "#A98AC0", marginBottom: "10px" }}>
+            <h6 className="RecipeType" style={{ fontSize: "1rem", color: "#626F47", marginBottom: "10px" }}>
               {recipe.type}
             </h6>
             <p
@@ -116,13 +115,24 @@ export default function RecipeCard() {
               {recipe.description}
             </p>
             <div className="d-flex justify-content-center align-items-center mt-3">
-              <Button>
+              <a href="#" className="btn" style={{
+                backgroundColor: "#626F47",  // Green button
+                color: "#fff",
+                borderRadius: "25px",
+                padding: "0.5rem 1rem",
+                textTransform: "uppercase",
+                fontWeight: "bold",
+                border: "none",
+                cursor: "pointer",
+              }}>
                 View Recipe
-              </Button>
+              </a>
             </div>
           </div>
         </div>
       ))}
     </div>
+
+
   );
 }

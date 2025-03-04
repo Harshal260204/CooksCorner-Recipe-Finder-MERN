@@ -3,14 +3,16 @@ import {
   createRecipe,
   deleteRecipe,
   getAllRecipes,
+  getRecipeByType,
   updateRecipe,
 } from "../controllers/recipeControllers.js";
 
 const recipeRouter = express.Router();
 
-recipeRouter.get("/all-recipes", getAllRecipes);
-recipeRouter.post("/create-recipe", createRecipe);
-recipeRouter.put("/update-recipe/:id", updateRecipe);
-recipeRouter.delete("/delete-recipe/:id", deleteRecipe);
+recipeRouter.get("/", getAllRecipes);
+recipeRouter.get("/:type", getRecipeByType); // Veg Or Non-Veg
+recipeRouter.post("/", createRecipe);
+recipeRouter.put("/:id", updateRecipe);
+recipeRouter.delete("/:id", deleteRecipe);
 
 export default recipeRouter;

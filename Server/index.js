@@ -11,7 +11,7 @@ app.use(cors());
 app.use(express.json());
 
 // User Related Routes
-app.use("/user", userRouter);
+app.use("/users", userRouter);
 
 // Recipes Related Routes
 app.use("/recipes", recipeRouter);
