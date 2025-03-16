@@ -14,26 +14,23 @@ export const getAllRecipes = async (req, res) => {
 // Get Recipes By Veg / Non Veg ()
 export const getRecipeByType = async (req, res) => {
   try {
-    const { type } = req.params;
+    // Your code to get recipes
+    const recipes = await recipe.find({ type: req.params.type });
 
-    if (!type) {
-      res.status(400).json({ message: "Enter The Type" });
+    if (!recipes) {
+      return res.status(404).json({ message: 'Recipes not found' });
     }
 
-    const recipes = await recipe.find({ type: type });
+    // Send response once here
+    return res.json(recipes);
 
-    if (recipes.length === 0) {
-      res.status(400).json({ message: `No ${type} Recipes Found` });
-    }
-
-    res
-      .status(200)
-      .json({ data: recipes, message: `${type} Recipes Are Fetched!` });
   } catch (error) {
-    console.log(error);
-    res.json(500).json({ message: "Server Error" });
+    // Ensure the response is not sent after an error has already been handled
+    console.error('Error getting recipes:', error);
+    return res.status(500).json({ message: 'Server Error' });
   }
 };
+
 
 // Create Recipes :
 export const createRecipe = async (req, res) => {
@@ -112,7 +109,7 @@ export const updateRecipe = async (req, res) => {
       cookingTime,
     } = req.body;
 
-    const recipeExist = await user.findById(id);
+    const recipeExist = await recipe.findById(id);
 
     if (!recipeExist) {
       res.status(400).json({ message: "Recipe Does Not Exist" });

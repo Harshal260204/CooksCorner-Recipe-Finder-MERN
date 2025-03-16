@@ -4,6 +4,7 @@ import dbConnection from "./src/config/Database.js";
 import userRouter from "./src/routes/userRoutes.js";
 import cors from "cors";
 import recipeRouter from "./src/routes/recipeRoutes.js";
+import topRecipeRouter from "./src/routes/topRecipesRoutes.js";
 dotenv.config();
 
 const app = express();
@@ -15,6 +16,9 @@ app.use("/users", userRouter);
 
 // Recipes Related Routes
 app.use("/recipes", recipeRouter);
+
+// Top Recipes Related Routes
+app.use("/top-recipes", topRecipeRouter);
 
 const PORT = process.env.PORT;
 

@@ -14,7 +14,7 @@ function Navbar() {
                             <Link to='/' className="nav-link" >Home</Link>
                         </li>
                         <li className="nav-item fw-semibold fs-6">
-                            <Link to='/Admin' className="nav-link" >Admin</Link>
+                            <Link to='/admin' className="nav-link" >Admin</Link>
                         </li>
                         <li className="nav-item fw-semibold fs-6">
                             <Link to='/recipes' className="nav-link" >Recipes</Link>

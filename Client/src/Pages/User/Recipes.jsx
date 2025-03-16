@@ -1,6 +1,6 @@
 import React from "react";
 import { assets } from "../../assets/assets";
-import RecipeCard from "../../Components/User/RecipeCard"; 
+import RecipeCard from "../../Components/User/RecipeCard";
 
 const Recipes = () => {
   const recipes = [
@@ -64,12 +64,12 @@ const Recipes = () => {
 
   return (
     <div>
-    <div className="d-flex flex-wrap justify-content-center content" >
-      {recipes.map((recipe) => (
-        <RecipeCard key={recipe.id} recipe={recipe} />
-      ))}
+      <div className="d-flex flex-wrap justify-content-center content">
+        {recipes.map((recipe) => (
+          <RecipeCard key={recipe.id} recipe={recipe} />
+        ))}
+      </div>
     </div>
-  </div>
   );
 };
 
