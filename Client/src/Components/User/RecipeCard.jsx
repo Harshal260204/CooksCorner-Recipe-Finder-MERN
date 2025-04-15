@@ -20,21 +20,21 @@ const RecipeCard = ({ recipe }) => {
         backgroundColor: "#DDEB9D",  // Matching background color
         color: "#2b2d42",
       }}>
-        <h5 className="RecipeName" style={{
+        <h5 className="RecipeName text-center" style={{
           fontSize: "1.1rem",
           fontWeight: "600",
           color: "#626F47",  // Matching text color
         }}>
           {recipe.name}
         </h5>
-        <h6 className="RecipeType" style={{
+        <h6 className="RecipeType text-center" style={{
           fontSize: "1rem",
           color: "#626F47",  // Consistent color for type
           marginBottom: "10px",
         }}>
           {recipe.type}
         </h6>
-        <p className="card-text" style={{
+        <p className="card-text text-center" style={{
           fontSize: "14px",
           color: "#2b2d42",
           height: "60px",

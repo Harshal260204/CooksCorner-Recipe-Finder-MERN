@@ -20,6 +20,7 @@ import AdminDashboard from './Pages/Admin/AdminDashboard'
 import CreateRecipeForm from './Components/Admin/CreateRecipeForm'
 import AllUsers from './Components/Admin/AllUsers'
 import Desert from './Pages/User/Desert'
+import AllRecipes from './Components/Admin/AllRecipes'
 
 function App() {
   return (
@@ -43,12 +44,13 @@ function App() {
         {/* 🛠 Nested Admin Routes */}
         <Route path="/admin" element={<Admin />}>
           <Route index element={<AdminDashboard />} /> {/* Default admin page */}
+          <Route path="all-recipes" element={<AllRecipes />} />
           <Route path="create-recipe" element={<CreateRecipeForm />} />
-          <Route path="users" element={<AllUsers />} /> {/* ✅ Fix Path */}
+          <Route path="all-users" element={<AllUsers />} /> {/* ✅ Fix Path */}
         </Route>
 
       </Routes>
-      <Footer /> 
+      <Footer />
     </BrowserRouter>
   )
 }

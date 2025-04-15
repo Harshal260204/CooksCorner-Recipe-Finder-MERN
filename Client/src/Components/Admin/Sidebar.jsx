@@ -13,7 +13,7 @@ export default function Sidebar() {
             </button>
             <ul className="dropdown-menu bg-dark">
               <li>
-                <Link to="recipes" className="dropdown-item text-white bg-dark"> {/* ✅ Fix Path */}
+                <Link to="all-recipes" className="dropdown-item text-white bg-dark"> {/* ✅ Fix Path */}
                   All Recipes
                 </Link>
               </li>

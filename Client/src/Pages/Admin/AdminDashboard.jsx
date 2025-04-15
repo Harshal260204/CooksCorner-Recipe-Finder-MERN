@@ -10,7 +10,7 @@ export default function AdminDashboard() {
 
   const renderContent = () => {
     switch (selectedOption) {
-      case 'allRecipes':
+      case 'all-Recipes':
         return <AllRecipes />;
       case 'createRecipe':
         return <CreateRecipeForm />;

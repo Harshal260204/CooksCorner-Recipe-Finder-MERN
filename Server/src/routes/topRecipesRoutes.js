@@ -5,12 +5,13 @@ import {
   editTopRecipes,
   getTopRecipes,
 } from "../controllers/topRecipeControllers.js";
+import { isAdmin } from "../middlewere/authMiddlewere.js";
 
 const topRecipeRouter = express.Router();
 
 topRecipeRouter.get("/", getTopRecipes);
-topRecipeRouter.post("/", createTopRecipe);
-topRecipeRouter.delete("/:id", deleteTopRecipe);
-topRecipeRouter.put("/:id", editTopRecipes);
+topRecipeRouter.post("/", isAdmin, createTopRecipe);
+topRecipeRouter.delete("/:id", isAdmin, deleteTopRecipe);
+topRecipeRouter.put("/:id", isAdmin, editTopRecipes);
 
 export default topRecipeRouter;

@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import '../../Styles/Forms.css';
+import axios from 'axios';
 
 function LoginForm() {
 
@@ -37,39 +38,41 @@ function LoginForm() {
       return;
     }
   
-    try {
-      const response = await fetch('http://localhost:3000/user/login', {
-        method: 'POST',
-        headers: {
-          'Content-type': 'application/json',
-        },
-        body: JSON.stringify(formData),
-      });
+    // try {
+    //   const response = await fetch('http://localhost:3000/user/login', {
+    //     method: 'POST',
+    //     headers: {
+    //       'Content-type': 'application/json',
+    //     },
+    //     body: JSON.stringify(formData),
+    //   });
   
-      if (response.ok) {
-        const responseData = await response.json();
+    //   if (response.ok) {
+    //     const responseData = await response.json();
   
-        console.log("Login Response Data:", responseData);
+    //     console.log("Login Response Data:", responseData);
   
-        if (responseData && responseData.user) {
-          // Store the token and user data
-          localStorage.setItem('token', responseData.token);
-          saveToken(responseData.token);
-          setUserDetails(responseData.user);
-        }
+    //     if (responseData && responseData.user) {
+    //       // Store the token and user data
+    //       localStorage.setItem('token', responseData.token);
+    //       saveToken(responseData.token);
+    //       setUserDetails(responseData.user);
+    //     }
   
-        setFormData({ email: '', password: '' });
+    //     setFormData({ email: '', password: '' });
   
-        alert('Login Successful');
-        navigate('/');
-      } else {
-        const errorData = await response.json();
-        alert(errorData.message || 'Login Failed');
-      }
-    } catch (error) {
-      console.error('Error during login:', error);
-      alert('An error occurred. Please try again.');
-    }
+    //     alert('Login Successful');
+    //     navigate('/');
+    //   } else {
+    //     const errorData = await response.json();
+    //     alert(errorData.message || 'Login Failed');
+    //   }
+    // } catch (error) {
+    //   console.error('Error during login:', error);
+    //   alert('An error occurred. Please try again.');
+    // }
+
+    const res = await axios.post("http://localhost:3000/user/login",{email,password})
   };
   
   
@@ -87,8 +90,8 @@ function LoginForm() {
               id="email"
               name="email"
               placeholder="Enter your email"
-              value={formData.email}
-              onChange={handleChange}
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
               required
             />
           </div>
@@ -100,15 +103,15 @@ function LoginForm() {
               id="password"
               name="password"
               placeholder="Enter your password"
-              value={formData.password}
-              onChange={handleChange}
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
               required
             />
           </div>
           <button type="submit" className="btn w-100" style={{ backgroundColor: '#626F47', color: 'white' }}>Login</button>
         </form>
         <div className="text-center mt-3">
-          <p>Don't have an account? <a href="/RegisterForm" className="text-decoration-none" style={{ color: '#CB9DF0' }}>Register</a></p>
+          <p>Don't have an account? <a href="/register-page" className="text-decoration-none" style={{ color: '#CB9DF0' }}>Register</a></p>
         </div>
       </div>
     </div>

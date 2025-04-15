@@ -22,6 +22,7 @@ const CreateRecipeForm = () => {
     console.log(recipe);
     const response = await axios.post("http://localhost:3000/recipes/", recipe);
     console.log(response);
+    alert("Recipe Created Succesfully")
   };
 
   return (

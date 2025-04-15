@@ -126,7 +126,7 @@ function RegisterPage() {
           <button type="submit" className="btn w-100" style={{ backgroundColor: '#626F47', color: 'white' }}>Register</button>
         </form>
         <div className="text-center mt-3">
-          <p>Already have an account? <a href="/LoginForm" className="text-decoration-none" style={{ color: '#000000' }}>Login</a></p>
+          <p>Already have an account? <a href="/login-page" className="text-decoration-none" style={{ color: '#000000' }}>Login</a></p>
         </div>
       </div>
     </div>
