@@ -1,8 +1,19 @@
 import React, { useState, useEffect } from 'react';
 import RecipeCard from '../../Components/User/RecipeCard';
 import axios from 'axios';
+import { useTheme } from '../../context/ThemeContext';
+import {
+  Container,
+  Typography,
+  Grid,
+  CircularProgress,
+  Alert,
+  AlertTitle,
+  Box
+} from '@mui/material';
 
 const Desert = () => {
+  const { darkMode } = useTheme();
   const [recipes, setRecipes] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -25,22 +36,53 @@ const Desert = () => {
   }, []);
 
   if (loading) {
-    return <div className="text-center mt-5"><h3>Loading dessert recipes...</h3></div>;
+    return (
+      <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '50vh' }}>
+        <CircularProgress size={60} sx={{ color: darkMode ? 'primary.main' : '#626F47' }} />
+      </Box>
+    );
   }
 
   if (error) {
-    return <div className="text-center mt-5"><h3 className="text-danger">{error}</h3></div>;
+    return (
+      <Container maxWidth="md" sx={{ py: 8 }}>
+        <Alert severity="error">
+          <AlertTitle>Error</AlertTitle>
+          {error}
+        </Alert>
+      </Container>
+    );
   }
 
   return (
-    <div className="container mt-4">
-      <h2 className="text-center mb-4">Dessert Recipes</h2>
-      <div className="d-flex flex-wrap justify-content-center">
-        {recipes.map((recipe) => (
-          <RecipeCard key={recipe._id} recipe={recipe} />
-        ))}
-      </div>
-    </div>
+    <Container maxWidth="lg" sx={{ py: 8 }}>
+      <Typography 
+        variant="h3" 
+        component="h1" 
+        align="center" 
+        sx={{ 
+          mb: 6,
+          fontWeight: 'bold',
+          color: darkMode ? 'primary.main' : '#626F47'
+        }}
+      >
+        Dessert Recipes
+      </Typography>
+      
+      {recipes.length === 0 ? (
+        <Alert severity="info" sx={{ justifyContent: 'center' }}>
+          No dessert recipes found.
+        </Alert>
+      ) : (
+        <Grid container spacing={4}>
+          {recipes.map((recipe) => (
+            <Grid item xs={12} sm={6} md={4} lg={3} key={recipe._id}>
+              <RecipeCard recipe={recipe} />
+            </Grid>
+          ))}
+        </Grid>
+      )}
+    </Container>
   );
 };
 

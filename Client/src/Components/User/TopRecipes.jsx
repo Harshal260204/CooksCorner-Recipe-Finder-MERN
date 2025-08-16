@@ -1,7 +1,19 @@
 import React from "react";
 import { assets } from "../../assets/assets";
+import {
+  Grid,
+  Card,
+  CardMedia,
+  CardContent,
+  Typography,
+  Button,
+  Box,
+  Rating
+} from '@mui/material';
+import { useTheme } from '../../context/ThemeContext';
 
 export default function TopRecipes() {
+  const { darkMode } = useTheme();
 
   const topRecipes = [
     {
@@ -42,104 +54,120 @@ export default function TopRecipes() {
     }
   ];
 
-  // Function to render star ratings
-  const renderRating = (rating) => {
-    const stars = [];
-    const fullStars = Math.floor(rating);
-    const hasHalfStar = rating % 1 >= 0.5;
-    
-    for (let i = 0; i < fullStars; i++) {
-      stars.push(<span key={i} className="text-warning">★</span>);
-    }
-    
-    if (hasHalfStar) {
-      stars.push(<span key="half" className="text-warning">☆</span>);
-    }
-    
-    const emptyStars = 5 - stars.length;
-    for (let i = 0; i < emptyStars; i++) {
-      stars.push(<span key={`empty-${i}`} className="text-warning">☆</span>);
-    }
-    
-    return <div>{stars}</div>;
-  };
-
   return (
-    <div className="d-flex flex-wrap justify-content-center content">
+    <Grid container spacing={3}>
       {topRecipes.map((recipe) => (
-        <div
-          className="card m-3"
-          style={{
-            width: "18rem",
-            border: "none",
-            borderRadius: "12px",
-            overflow: "hidden",
-            backgroundColor: "#DDEB9D",
-            boxShadow: "0 8px 16px rgba(0, 0, 0, 0.1)",
-            transition: "transform 0.3s ease, box-shadow 0.3s ease",
-          }}
-          key={recipe.id}
-        >
-          <img
-            src={recipe.img}
-            className="card-img-top"
-            alt={recipe.name}
-            style={{
-              height: "200px",
-              objectFit: "cover",
-              textAlign: "center"
-            }}
-          />
-          <div
-            className="card-body"
-            style={{
-              padding: "1.2rem",
-              backgroundColor: "#DDEB9D",
-              color: "#2b2d42",
+        <Grid item xs={12} sm={6} md={3} key={recipe.id}>
+          <Card 
+            sx={{ 
+              height: '100%',
+              display: 'flex',
+              flexDirection: 'column',
+              borderRadius: '12px',
+              overflow: 'hidden',
+              boxShadow: 3,
+              transition: 'transform 0.3s ease, box-shadow 0.3s ease',
+              backgroundColor: darkMode ? 'background.paper' : '#DDEB9D',
+              '&:hover': {
+                transform: 'translateY(-4px)',
+                boxShadow: 6
+              }
             }}
           >
-            <h5 className="RecipeName" style={{ fontSize: "1.1rem", fontWeight: "600", color: "#626F47" }}>
-              {recipe.name}
-            </h5>
-            <h6 className="RecipeType" style={{ fontSize: "1rem", color: "#626F47", marginBottom: "10px" }}>
-              {recipe.type}
-            </h6>
-            <p
-              className="card-text"
-              style={{
-                fontSize: "14px",
-                color: "#2b2d42",
-                height: "60px",
-                overflow: "hidden",
-                textOverflow: "ellipsis",
+            <CardMedia
+              component="img"
+              height="200"
+              image={recipe.img}
+              alt={recipe.name}
+              sx={{ objectFit: 'cover' }}
+            />
+            <CardContent 
+              sx={{ 
+                flexGrow: 1,
+                backgroundColor: darkMode ? 'background.paper' : '#DDEB9D',
+                color: darkMode ? 'text.primary' : '#2b2d42',
+                display: 'flex',
+                flexDirection: 'column'
               }}
             >
-              {recipe.description}
-            </p>
-            
-            {/* Rating Display */}
-            <div className="d-flex justify-content-center align-items-center mb-2">
-              {renderRating(recipe.averageRating || 0)}
-              <span className="ms-2">({recipe.ratingsCount || 0})</span>
-            </div>
-            
-            <div className="d-flex justify-content-center align-items-center mt-3">
-              <a href="#" className="btn" style={{
-                backgroundColor: "#626F47",
-                color: "#fff",
-                borderRadius: "25px",
-                padding: "0.5rem 1rem",
-                textTransform: "uppercase",
-                fontWeight: "bold",
-                border: "none",
-                cursor: "pointer",
-              }}>
-                View Recipe
-              </a>
-            </div>
-          </div>
-        </div>
+              <Typography 
+                gutterBottom 
+                variant="h6" 
+                component="h3" 
+                sx={{ 
+                  textAlign: 'center',
+                  fontWeight: 600,
+                  color: darkMode ? 'primary.main' : '#626F47',
+                  mb: 1
+                }}
+              >
+                {recipe.name}
+              </Typography>
+              
+              <Typography 
+                variant="subtitle1" 
+                sx={{ 
+                  textAlign: 'center',
+                  color: darkMode ? 'primary.main' : '#626F47',
+                  mb: 2
+                }}
+              >
+                {recipe.type}
+              </Typography>
+              
+              <Typography 
+                variant="body2" 
+                sx={{ 
+                  textAlign: 'center',
+                  color: darkMode ? 'text.primary' : '#2b2d42',
+                  mb: 2,
+                  flexGrow: 1,
+                  overflow: 'hidden',
+                  textOverflow: 'ellipsis',
+                  display: '-webkit-box',
+                  WebkitLineClamp: 3,
+                  WebkitBoxOrient: 'vertical'
+                }}
+              >
+                {recipe.description}
+              </Typography>
+              
+              {/* Rating Display */}
+              <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', mb: 2 }}>
+                <Rating 
+                  value={recipe.averageRating || 0} 
+                  precision={0.5} 
+                  readOnly 
+                  sx={{ color: '#fbbf24' }} // amber-400
+                />
+                <Typography variant="body2" sx={{ ml: 1 }}>
+                  ({recipe.ratingsCount || 0})
+                </Typography>
+              </Box>
+              
+              <Box sx={{ mt: 'auto', display: 'flex', justifyContent: 'center' }}>
+                <Button 
+                  variant="contained" 
+                  color="primary"
+                  sx={{ 
+                    backgroundColor: darkMode ? 'primary.main' : '#626F47',
+                    color: 'white',
+                    borderRadius: '25px',
+                    padding: '8px 16px',
+                    textTransform: 'uppercase',
+                    fontWeight: 'bold',
+                    '&:hover': {
+                      backgroundColor: darkMode ? 'primary.dark' : '#4a5a35'
+                    }
+                  }}
+                >
+                  View Recipe
+                </Button>
+              </Box>
+            </CardContent>
+          </Card>
+        </Grid>
       ))}
-    </div>
+    </Grid>
   );
 }

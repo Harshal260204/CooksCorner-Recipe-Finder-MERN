@@ -1,80 +1,291 @@
 import { Link } from 'react-router-dom';
-import { useContext } from 'react';
+import { useContext, useState } from 'react';
 import { AuthContext } from '../../context/AuthContext';
+import { useTheme } from '../../context/ThemeContext';
+import {
+  AppBar,
+  Toolbar,
+  Typography,
+  Button,
+  IconButton,
+  Menu,
+  MenuItem,
+  Divider,
+  Switch,
+  FormControlLabel,
+  Box,
+  Drawer,
+  List,
+  ListItem,
+  ListItemText,
+  useMediaQuery,
+  useTheme as useMuiTheme
+} from '@mui/material';
+import {
+  Menu as MenuIcon,
+  Brightness4 as DarkModeIcon,
+  Brightness7 as LightModeIcon,
+  AccountCircle,
+  Home,
+  Restaurant,
+  Book,
+  ShoppingCart,
+  AdminPanelSettings,
+  ContactSupport,
+  Login,
+  PersonAdd,
+  Person,
+  Logout
+} from '@mui/icons-material';
 
 function Navbar() {
-    const { user, logout } = useContext(AuthContext);
+  const { user, logout } = useContext(AuthContext);
+  const { darkMode, toggleDarkMode } = useTheme();
+  const muiTheme = useMuiTheme();
+  const isMobile = useMediaQuery(muiTheme.breakpoints.down('md'));
+  
+  const [anchorEl, setAnchorEl] = useState(null);
+  const [mobileOpen, setMobileOpen] = useState(false);
 
-    const handleLogout = () => {
-        logout();
-        alert('Logged out successfully!');
-    };
+  const handleMenuOpen = (event) => {
+    setAnchorEl(event.currentTarget);
+  };
 
-    return (
-        <nav className="navbar navbar-expand-lg" style={{backgroundColor:"#A0C878"}}>
-            <div className="container-fluid">
-                <Link className="navbar-brand fw-bold fs-2 ps-2" to='/'>CooksCorner</Link>
-                <button className="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-                    <span className="navbar-toggler-icon" />
-                </button>
-                <div className="collapse navbar-collapse" id="navbarSupportedContent">
-                    <ul className="navbar-nav me-auto mb-2 mb-lg-0 pt-2">
-                        <li className="nav-item fw-semibold fs-6">
-                            <Link to='/' className="nav-link" >Home</Link>
-                        </li>
-                        <li className="nav-item fw-semibold fs-6">
-                            <Link to='/recipes' className="nav-link" >Recipes</Link>
-                        </li>
-                        {user && (
-                            <>
-                                <li className="nav-item fw-semibold fs-6">
-                                    <Link to='/premium-cookbooks' className="nav-link" >CookBooks</Link>
-                                </li>
-                                <li className="nav-item fw-semibold fs-6">
-                                    <Link to='/cart' className="nav-link" >Cart</Link>
-                                </li>
-                            </>
-                        )}
-                        {user?.isAdmin && (
-                            <li className="nav-item fw-semibold fs-6">
-                                <Link to='/admin' className="nav-link" >Admin</Link>
-                            </li>
-                        )}
-                        <li className="nav-item fw-semibold fs-6">
-                            <Link to='/contact-us' className="nav-link" >Contact Us</Link>
-                        </li>
-                    </ul>
-                    
-                    {/* User Authentication Section */}
-                    <ul className="navbar-nav ms-auto mb-2 mb-lg-0 pt-2">
-                        {user ? (
-                            <>
-                                <li className="nav-item dropdown">
-                                    <a className="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                                        Welcome, {user.name}
-                                    </a>
-                                    <ul className="dropdown-menu">
-                                        <li><Link className="dropdown-item" to="/profile">Profile</Link></li>
-                                        <li><hr className="dropdown-divider" /></li>
-                                        <li><button className="dropdown-item" onClick={handleLogout}>Logout</button></li>
-                                    </ul>
-                                </li>
-                            </>
-                        ) : (
-                            <>
-                                <li className="nav-item fw-semibold fs-6">
-                                    <Link to='/login-page' className="nav-link" >Login</Link>
-                                </li>
-                                <li className="nav-item fw-semibold fs-6">
-                                    <Link to='/register-page' className="nav-link" >Register</Link>
-                                </li>
-                            </>
-                        )}
-                    </ul>
-                </div>
-            </div>
-        </nav>
-    );
+  const handleMenuClose = () => {
+    setAnchorEl(null);
+  };
+
+  const handleDrawerToggle = () => {
+    setMobileOpen(!mobileOpen);
+  };
+
+  const handleLogout = () => {
+    logout();
+    handleMenuClose();
+  };
+
+  const navItems = [
+    { text: 'Home', icon: <Home />, path: '/' },
+    { text: 'Recipes', icon: <Restaurant />, path: '/recipes' },
+    ...(user ? [
+      { text: 'CookBooks', icon: <Book />, path: '/premium-cookbooks' },
+      { text: 'Cart', icon: <ShoppingCart />, path: '/cart' }
+    ] : []),
+    ...(user?.isAdmin ? [
+      { text: 'Admin', icon: <AdminPanelSettings />, path: '/admin' }
+    ] : []),
+    { text: 'Contact Us', icon: <ContactSupport />, path: '/contact-us' }
+  ];
+
+  const authItems = user ? [
+    { text: 'Profile', icon: <Person />, path: '/profile' },
+    { text: 'Logout', icon: <Logout />, action: handleLogout }
+  ] : [
+    { text: 'Login', icon: <Login />, path: '/login-page' },
+    { text: 'Register', icon: <PersonAdd />, path: '/register-page' }
+  ];
+
+  const desktopNav = (
+    <Box sx={{ display: 'flex', alignItems: 'center', flexGrow: 1 }}>
+      <Typography 
+        variant="h6" 
+        component={Link} 
+        to="/" 
+        sx={{ 
+          textDecoration: 'none', 
+          color: 'inherit', 
+          fontWeight: 'bold',
+          mr: 3,
+          fontSize: '1.5rem'
+        }}
+      >
+        CooksCorner
+      </Typography>
+      
+      <Box sx={{ display: 'flex', flexGrow: 1 }}>
+        {navItems.map((item) => (
+          <Button
+            key={item.text}
+            component={Link}
+            to={item.path}
+            startIcon={item.icon}
+            sx={{ 
+              color: 'inherit', 
+              mx: 1,
+              fontWeight: 500,
+              '&:hover': {
+                backgroundColor: 'rgba(255, 255, 255, 0.1)'
+              }
+            }}
+          >
+            {item.text}
+          </Button>
+        ))}
+      </Box>
+      
+      <FormControlLabel
+        control={
+          <Switch
+            checked={darkMode}
+            onChange={toggleDarkMode}
+            icon={<DarkModeIcon />}
+            checkedIcon={<LightModeIcon />}
+          />
+        }
+        label={darkMode ? <LightModeIcon /> : <DarkModeIcon />}
+        sx={{ mx: 2 }}
+      />
+      
+      {user ? (
+        <>
+          <Button
+            aria-controls="menu-appbar"
+            aria-haspopup="true"
+            onClick={handleMenuOpen}
+            color="inherit"
+            startIcon={<AccountCircle />}
+          >
+            Welcome, {user.name}
+          </Button>
+          <Menu
+            id="menu-appbar"
+            anchorEl={anchorEl}
+            anchorOrigin={{
+              vertical: 'top',
+              horizontal: 'right',
+            }}
+            keepMounted
+            transformOrigin={{
+              vertical: 'top',
+              horizontal: 'right',
+            }}
+            open={Boolean(anchorEl)}
+            onClose={handleMenuClose}
+          >
+            <MenuItem component={Link} to="/profile" onClick={handleMenuClose}>
+              <Person sx={{ mr: 1 }} /> Profile
+            </MenuItem>
+            <Divider />
+            <MenuItem onClick={handleLogout}>
+              <Logout sx={{ mr: 1 }} /> Logout
+            </MenuItem>
+          </Menu>
+        </>
+      ) : (
+        <>
+          <Button component={Link} to="/login-page" startIcon={<Login />} sx={{ mx: 1 }}>
+            Login
+          </Button>
+          <Button component={Link} to="/register-page" variant="contained" color="primary" sx={{ mx: 1 }}>
+            Register
+          </Button>
+        </>
+      )}
+    </Box>
+  );
+
+  const mobileNav = (
+    <>
+      <IconButton
+        color="inherit"
+        aria-label="open drawer"
+        edge="start"
+        onClick={handleDrawerToggle}
+        sx={{ mr: 2 }}
+      >
+        <MenuIcon />
+      </IconButton>
+      <Typography 
+        variant="h6" 
+        component={Link} 
+        to="/" 
+        sx={{ 
+          textDecoration: 'none', 
+          color: 'inherit', 
+          fontWeight: 'bold',
+          flexGrow: 1
+        }}
+      >
+        CooksCorner
+      </Typography>
+      <FormControlLabel
+        control={
+          <Switch
+            checked={darkMode}
+            onChange={toggleDarkMode}
+            icon={<DarkModeIcon />}
+            checkedIcon={<LightModeIcon />}
+          />
+        }
+        label=""
+      />
+    </>
+  );
+
+  const drawer = (
+    <Box onClick={handleDrawerToggle} sx={{ textAlign: 'center' }}>
+      <Typography variant="h6" sx={{ my: 2, fontWeight: 'bold' }}>
+        CooksCorner
+      </Typography>
+      <Divider />
+      <List>
+        {navItems.map((item) => (
+          <ListItem key={item.text} component={Link} to={item.path}>
+            {item.icon}
+            <ListItemText primary={item.text} sx={{ ml: 2 }} />
+          </ListItem>
+        ))}
+        <Divider />
+        {authItems.map((item) => (
+          <ListItem 
+            key={item.text} 
+            component={item.path ? Link : 'button'}
+            to={item.path}
+            onClick={item.action}
+          >
+            {item.icon}
+            <ListItemText primary={item.text} sx={{ ml: 2 }} />
+          </ListItem>
+        ))}
+      </List>
+    </Box>
+  );
+
+  return (
+    <>
+      <AppBar 
+        position="static" 
+        sx={{ 
+          backgroundColor: darkMode ? 'primary.dark' : 'primary.main',
+          mb: 2
+        }}
+      >
+        <Toolbar>
+          {isMobile ? mobileNav : desktopNav}
+        </Toolbar>
+      </AppBar>
+      
+      {isMobile && (
+        <Drawer
+          variant="temporary"
+          open={mobileOpen}
+          onClose={handleDrawerToggle}
+          ModalProps={{
+            keepMounted: true,
+          }}
+          sx={{
+            '& .MuiDrawer-paper': { 
+              boxSizing: 'border-box', 
+              width: 240,
+              backgroundColor: darkMode ? 'background.paper' : 'background.default'
+            },
+          }}
+        >
+          {drawer}
+        </Drawer>
+      )}
+    </>
+  );
 }
 
 export default Navbar;

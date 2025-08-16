@@ -1,7 +1,36 @@
 import React, { useState } from "react";
 import axios from 'axios';
+import { useTheme } from '../../context/ThemeContext';
+import {
+  Container,
+  Box,
+  Typography,
+  TextField,
+  FormControl,
+  InputLabel,
+  Select,
+  MenuItem,
+  Button,
+  CircularProgress,
+  Alert,
+  AlertTitle,
+  Paper,
+  Grid,
+  InputAdornment
+} from '@mui/material';
+import {
+  Fastfood as FastfoodIcon,
+  Description as DescriptionIcon,
+  Category as CategoryIcon,
+  Restaurant as RestaurantIcon,
+  List as ListIcon,
+  Assignment as AssignmentIcon,
+  AccessTime as AccessTimeIcon,
+  CloudUpload as CloudUploadIcon
+} from '@mui/icons-material';
 
 const CreateRecipeForm = () => {
+  const { darkMode } = useTheme();
   const [recipe, setRecipe] = useState({
     name: "",
     description: "",
@@ -12,6 +41,10 @@ const CreateRecipeForm = () => {
     cookingTime: "",
     image: null
   });
+  
+  const [loading, setLoading] = useState(false);
+  const [success, setSuccess] = useState(false);
+  const [error, setError] = useState("");
 
   const handleChange = (e) => {
     const { name, value, files } = e.target;
@@ -20,10 +53,25 @@ const CreateRecipeForm = () => {
     } else {
       setRecipe({ ...recipe, [name]: value });
     }
+    
+    // Clear messages when user starts typing
+    if (success) setSuccess(false);
+    if (error) setError("");
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setLoading(true);
+    setSuccess(false);
+    setError("");
+    
+    // Basic validation
+    if (!recipe.name || !recipe.description || !recipe.category || 
+        !recipe.ingredients || !recipe.instructions || !recipe.cookingTime) {
+      setError("Please fill in all required fields.");
+      setLoading(false);
+      return;
+    }
     
     const formData = new FormData();
     formData.append('name', recipe.name);
@@ -47,7 +95,7 @@ const CreateRecipeForm = () => {
       });
       
       console.log(response);
-      alert("Recipe Created Successfully");
+      setSuccess(true);
       
       // Reset form
       setRecipe({
@@ -62,60 +110,253 @@ const CreateRecipeForm = () => {
       });
     } catch (error) {
       console.error("Error creating recipe:", error);
-      alert("Error creating recipe");
+      setError("Error creating recipe. Please try again.");
+    } finally {
+      setLoading(false);
     }
   };
 
   return (
-    <div className="container mt-5">
-      <h2 className="text-center mb-4">Create Recipe</h2>
-      <form onSubmit={handleSubmit} className="border p-4 rounded shadow-lg">
-        <div className="mb-3">
-          <label className="form-label">Name:</label>
-          <input type="text" name="name" className="form-control" value={recipe.name} onChange={handleChange} required />
-        </div>
-
-        <div className="mb-3">
-          <label className="form-label">Description:</label>
-          <textarea name="description" className="form-control" value={recipe.description} onChange={handleChange} required></textarea>
-        </div>
-
-        <div className="mb-3">
-          <label className="form-label">Category:</label>
-          <input type="text" name="category" className="form-control" value={recipe.category} onChange={handleChange} required />
-        </div>
-
-        <div className="mb-3">
-          <label className="form-label">Type:</label>
-          <select name="type" className="form-select" value={recipe.type} onChange={handleChange} required>
-            <option value="Veg">Veg</option>
-            <option value="Non-Veg">Non-Veg</option>
-          </select>
-        </div>
-
-        <div className="mb-3">
-          <label className="form-label">Ingredients (comma-separated):</label>
-          <input type="text" name="ingredients" className="form-control" value={recipe.ingredients} onChange={handleChange} required />
-        </div>
-
-        <div className="mb-3">
-          <label className="form-label">Instructions:</label>
-          <textarea name="instructions" className="form-control" value={recipe.instructions} onChange={handleChange} required></textarea>
-        </div>
-
-        <div className="mb-3">
-          <label className="form-label">Cooking Time (in minutes):</label>
-          <input type="number" name="cookingTime" className="form-control" value={recipe.cookingTime} onChange={handleChange} required />
-        </div>
+    <Container maxWidth="md" sx={{ py: 8 }}>
+      <Paper 
+        elevation={6} 
+        sx={{ 
+          p: 4, 
+          borderRadius: 4,
+          backgroundColor: darkMode ? 'background.paper' : 'white'
+        }}
+      >
+        <Typography 
+          component="h1" 
+          variant="h4" 
+          align="center" 
+          sx={{ 
+            mb: 3,
+            fontWeight: 'bold',
+            color: darkMode ? 'primary.main' : '#626F47'
+          }}
+        >
+          Create New Recipe
+        </Typography>
         
-        <div className="mb-3">
-          <label className="form-label">Recipe Image:</label>
-          <input type="file" name="image" className="form-control" onChange={handleChange} accept="image/*" />
-        </div>
-
-        <button type="submit" className="btn btn-primary w-100">Create Recipe</button>
-      </form>
-    </div>
+        {success && (
+          <Alert severity="success" sx={{ mb: 2 }}>
+            <AlertTitle>Success</AlertTitle>
+            Recipe created successfully!
+          </Alert>
+        )}
+        
+        {error && (
+          <Alert severity="error" sx={{ mb: 2 }}>
+            <AlertTitle>Error</AlertTitle>
+            {error}
+          </Alert>
+        )}
+        
+        <Box component="form" onSubmit={handleSubmit} sx={{ mt: 2 }}>
+          <Grid container spacing={3}>
+            <Grid item xs={12}>
+              <TextField
+                variant="outlined"
+                required
+                fullWidth
+                id="name"
+                label="Recipe Name"
+                name="name"
+                value={recipe.name}
+                onChange={handleChange}
+                InputProps={{
+                  startAdornment: (
+                    <InputAdornment position="start">
+                      <FastfoodIcon />
+                    </InputAdornment>
+                  ),
+                }}
+              />
+            </Grid>
+            
+            <Grid item xs={12}>
+              <TextField
+                variant="outlined"
+                required
+                fullWidth
+                id="description"
+                label="Description"
+                name="description"
+                multiline
+                rows={3}
+                value={recipe.description}
+                onChange={handleChange}
+                InputProps={{
+                  startAdornment: (
+                    <InputAdornment position="start">
+                      <DescriptionIcon />
+                    </InputAdornment>
+                  ),
+                }}
+              />
+            </Grid>
+            
+            <Grid item xs={12} sm={6}>
+              <TextField
+                variant="outlined"
+                required
+                fullWidth
+                id="category"
+                label="Category"
+                name="category"
+                value={recipe.category}
+                onChange={handleChange}
+                InputProps={{
+                  startAdornment: (
+                    <InputAdornment position="start">
+                      <CategoryIcon />
+                    </InputAdornment>
+                  ),
+                }}
+              />
+            </Grid>
+            
+            <Grid item xs={12} sm={6}>
+              <FormControl fullWidth variant="outlined">
+                <InputLabel id="type-label">Type</InputLabel>
+                <Select
+                  labelId="type-label"
+                  id="type"
+                  name="type"
+                  value={recipe.type}
+                  onChange={handleChange}
+                  startAdornment={
+                    <InputAdornment position="start">
+                      <RestaurantIcon />
+                    </InputAdornment>
+                  }
+                >
+                  <MenuItem value="Veg">Veg</MenuItem>
+                  <MenuItem value="Non-Veg">Non-Veg</MenuItem>
+                </Select>
+              </FormControl>
+            </Grid>
+            
+            <Grid item xs={12}>
+              <TextField
+                variant="outlined"
+                required
+                fullWidth
+                id="ingredients"
+                label="Ingredients (comma-separated)"
+                name="ingredients"
+                value={recipe.ingredients}
+                onChange={handleChange}
+                InputProps={{
+                  startAdornment: (
+                    <InputAdornment position="start">
+                      <ListIcon />
+                    </InputAdornment>
+                  ),
+                }}
+              />
+            </Grid>
+            
+            <Grid item xs={12}>
+              <TextField
+                variant="outlined"
+                required
+                fullWidth
+                id="instructions"
+                label="Instructions"
+                name="instructions"
+                multiline
+                rows={4}
+                value={recipe.instructions}
+                onChange={handleChange}
+                InputProps={{
+                  startAdornment: (
+                    <InputAdornment position="start">
+                      <AssignmentIcon />
+                    </InputAdornment>
+                  ),
+                }}
+              />
+            </Grid>
+            
+            <Grid item xs={12} sm={6}>
+              <TextField
+                variant="outlined"
+                required
+                fullWidth
+                id="cookingTime"
+                label="Cooking Time (minutes)"
+                name="cookingTime"
+                type="number"
+                value={recipe.cookingTime}
+                onChange={handleChange}
+                InputProps={{
+                  startAdornment: (
+                    <InputAdornment position="start">
+                      <AccessTimeIcon />
+                    </InputAdornment>
+                  ),
+                }}
+              />
+            </Grid>
+            
+            <Grid item xs={12} sm={6}>
+              <Button
+                variant="outlined"
+                component="label"
+                fullWidth
+                sx={{ 
+                  height: '56px',
+                  borderColor: darkMode ? 'primary.main' : '#626F47',
+                  color: darkMode ? 'primary.main' : '#626F47',
+                  '&:hover': {
+                    borderColor: darkMode ? 'primary.dark' : '#4a5a35',
+                    backgroundColor: darkMode ? 'primary.main' : '#626F47',
+                    color: 'white'
+                  }
+                }}
+                startIcon={<CloudUploadIcon />}
+              >
+                Upload Recipe Image
+                <input
+                  type="file"
+                  name="image"
+                  onChange={handleChange}
+                  accept="image/*"
+                  hidden
+                />
+              </Button>
+              {recipe.image && (
+                <Typography variant="body2" sx={{ mt: 1, textAlign: 'center' }}>
+                  Selected: {recipe.image.name}
+                </Typography>
+              )}
+            </Grid>
+            
+            <Grid item xs={12}>
+              <Button
+                type="submit"
+                fullWidth
+                variant="contained"
+                color="primary"
+                size="large"
+                disabled={loading}
+                sx={{ 
+                  py: 1.5,
+                  backgroundColor: darkMode ? 'primary.main' : '#626F47',
+                  '&:hover': {
+                    backgroundColor: darkMode ? 'primary.dark' : '#4a5a35'
+                  }
+                }}
+              >
+                {loading ? <CircularProgress size={24} sx={{ color: 'white' }} /> : 'Create Recipe'}
+              </Button>
+            </Grid>
+          </Grid>
+        </Box>
+      </Paper>
+    </Container>
   );
 };
 

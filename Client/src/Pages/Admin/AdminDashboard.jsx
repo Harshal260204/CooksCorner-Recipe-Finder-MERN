@@ -4,8 +4,11 @@ import CreateRecipeForm from '../../Components/Admin/CreateRecipeForm';
 import Users from '../../Components/Admin/AllUsers';
 import Messages from '../../Components/Admin/userMessages';
 import { useState } from 'react';
+import { useTheme } from '../../context/ThemeContext';
+import { Box } from '@mui/material';
 
 export default function AdminDashboard() {
+  const { darkMode } = useTheme();
   const [selectedOption, setSelectedOption] = useState('createRecipe');
 
   const renderContent = () => {
@@ -24,11 +27,24 @@ export default function AdminDashboard() {
   };
 
   return (
-    <div className="d-flex">
+    <Box 
+      sx={{ 
+        display: 'flex',
+        minHeight: '100vh',
+        backgroundColor: darkMode ? 'background.default' : '#f8f9fa'
+      }}
+    >
       <Sidebar setSelectedOption={setSelectedOption} />
-      <div className="flex-grow-1 p-4 bg-light">
+      <Box 
+        component="main" 
+        sx={{ 
+          flexGrow: 1,
+          p: 3,
+          backgroundColor: darkMode ? 'background.default' : '#f8f9fa'
+        }}
+      >
         {renderContent()}
-      </div>
-    </div>
+      </Box>
+    </Box>
   );
 }

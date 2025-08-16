@@ -9,6 +9,24 @@ import drinksImg from '../../assets/drinks.jpg'
 import snacksImg from '../../assets/snacks.jpg'
 import soupImg from '../../assets/soupssandwiches.jpg'
 import axios from 'axios';
+import {
+  Container,
+  Typography,
+  TextField,
+  Button,
+  Box,
+  Grid,
+  Card,
+  CardMedia,
+  CardContent,
+  CardActions,
+  IconButton,
+  InputAdornment
+} from '@mui/material';
+import {
+  Search as SearchIcon,
+  Clear as ClearIcon
+} from '@mui/icons-material';
 
 function Homepage() {
   const [searchQuery, setSearchQuery] = useState('');
@@ -29,109 +47,231 @@ function Homepage() {
     }
   };
 
+  const clearSearch = () => {
+    setSearchQuery('');
+    setShowResults(false);
+    setSearchResults([]);
+  };
+
+  const categoryItems = [
+    { name: 'Desert', image: desertImg, path: '/desert' },
+    { name: 'Breakfast', image: breakfastImg, path: '/breakfast' },
+    { name: 'Main Course', image: mainCourseImg, path: '/main-course' },
+    { name: 'Drinks', image: drinksImg, path: '/drinks' },
+    { name: 'Snacks', image: snacksImg, path: '/snacks' },
+    { name: 'Sandwiches', image: soupImg, path: '/soups-sandwiches' }
+  ];
+
   return (
-    <div >
+    <div className="min-h-screen">
       {/* Hero Section */}
-      <div>
-        <img style={{ width: "100%", height: "700px" }} src={assets.car1} alt="" />
-      </div>
+      <Box sx={{ position: 'relative', height: { xs: '300px', sm: '400px', md: '500px' }, mb: 4 }}>
+        <img 
+          src={assets.car1} 
+          alt="Hero" 
+          style={{ 
+            width: '100%', 
+            height: '100%', 
+            objectFit: 'cover',
+            borderRadius: '0 0 20px 20px'
+          }} 
+        />
+        <Box 
+          sx={{ 
+            position: 'absolute', 
+            top: '50%', 
+            left: '50%', 
+            transform: 'translate(-50%, -50%)', 
+            textAlign: 'center',
+            color: 'white',
+            width: '100%'
+          }}
+        >
+          <Typography 
+            variant="h2" 
+            component="h1" 
+            sx={{ 
+              fontWeight: 'bold', 
+              textShadow: '2px 2px 4px rgba(0,0,0,0.5)',
+              mb: 2
+            }}
+          >
+            Discover Amazing Recipes
+          </Typography>
+          <Typography 
+            variant="h5" 
+            sx={{ 
+              textShadow: '1px 1px 2px rgba(0,0,0,0.5)',
+              maxWidth: '600px',
+              mx: 'auto'
+            }}
+          >
+            From quick meals to gourmet dishes, find your next favorite recipe
+          </Typography>
+        </Box>
+      </Box>
 
       {/* Search Section */}
-      <div className="container mt-4">
-        <form onSubmit={handleSearch} className="d-flex justify-content-center">
-          <div className="input-group" style={{ maxWidth: '600px' }}>
-            <input
-              type="text"
-              className="form-control"
-              placeholder="Search for recipes..."
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-            />
-            <button className="btn btn-primary" type="submit">Search</button>
-          </div>
-        </form>
+      <Container maxWidth="md" sx={{ mb: 6 }}>
+        <Box component="form" onSubmit={handleSearch} sx={{ display: 'flex', gap: 2 }}>
+          <TextField
+            fullWidth
+            variant="outlined"
+            placeholder="Search for recipes..."
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+            InputProps={{
+              startAdornment: (
+                <InputAdornment position="start">
+                  <SearchIcon />
+                </InputAdornment>
+              ),
+            }}
+          />
+          <Button 
+            type="submit" 
+            variant="contained" 
+            color="primary" 
+            size="large"
+            startIcon={<SearchIcon />}
+          >
+            Search
+          </Button>
+        </Box>
         
         {/* Search Results */}
         {showResults && (
-          <div className="mt-4">
-            <h3>Search Results for "{searchQuery}"</h3>
+          <Box sx={{ mt: 4 }}>
+            <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 2 }}>
+              <Typography variant="h5">
+                Search Results for "{searchQuery}"
+              </Typography>
+              <IconButton onClick={clearSearch} color="secondary">
+                <ClearIcon />
+              </IconButton>
+            </Box>
+            
             {searchResults.length > 0 ? (
-              <div className="d-flex flex-wrap justify-content-center">
-                {searchResults.map(recipe => (
-                  <div key={recipe._id} className="card m-2" style={{ width: '18rem' }}>
-                    <div className="card-body">
-                      <h5 className="card-title">{recipe.name}</h5>
-                      <p className="card-text">{recipe.description}</p>
-                      <p className="text-muted">Category: {recipe.category}</p>
-                    </div>
-                  </div>
+              <Grid container spacing={3}>
+                {searchResults.map((recipe) => (
+                  <Grid item xs={12} sm={6} md={4} key={recipe._id}>
+                    <Card sx={{ height: '100%', display: 'flex', flexDirection: 'column' }}>
+                      <CardMedia
+                        component="img"
+                        height="140"
+                        image={recipe.imageUrl ? `http://localhost:3000${recipe.imageUrl}` : assets.car1}
+                        alt={recipe.name}
+                      />
+                      <CardContent sx={{ flexGrow: 1 }}>
+                        <Typography gutterBottom variant="h6" component="h3">
+                          {recipe.name}
+                        </Typography>
+                        <Typography variant="body2" color="text.secondary">
+                          {recipe.description}
+                        </Typography>
+                        <Typography variant="body2" color="text.secondary" sx={{ mt: 1 }}>
+                          Category: {recipe.category}
+                        </Typography>
+                      </CardContent>
+                      <CardActions>
+                        <Button size="small" color="primary">
+                          View Recipe
+                        </Button>
+                      </CardActions>
+                    </Card>
+                  </Grid>
                 ))}
-              </div>
+              </Grid>
             ) : (
-              <p>No recipes found matching your search.</p>
+              <Typography variant="body1" sx={{ textAlign: 'center', py: 4 }}>
+                No recipes found matching your search.
+              </Typography>
             )}
-            <button className="btn btn-secondary mt-3" onClick={() => setShowResults(false)}>
-              Clear Search
-            </button>
-          </div>
+          </Box>
         )}
-      </div>
+      </Container>
 
       {/* CATEGORIES SECTION */}
-      <div className="container-fluid pb-3 Categories-Component">
-        <div className="row justify-content-center">
-          <h2 className="text-center fw-bold p-4">What Will You Cook Next?</h2>
-
-          <Link to='/desert' className="card col-2 mx-auto px-0 text-decoration-none mb-3" style={{ width: '12rem', boxShadow: "inset 0 0 10px rgba(0, 0, 0, 0.2)", backgroundColor: "000000" }}>
-            <img src={desertImg} className="card-img-top" alt='' />
-            <div className="card-body" style={{ backgroundColor: "#626F47" }}>
-              <h5 className="card-title text-center text-white">Desert</h5>
-            </div>
-          </Link>
-
-          <Link to='/breakfast' className="card col-2 mx-auto px-0 text-decoration-none mb-3" style={{ width: '12rem', boxShadow: "inset 0 0 10px rgba(0, 0, 0, 0.2)", backgroundColor: "000000" }}>
-            <img src={breakfastImg} className="card-img-top" alt='' />
-            <div className="card-body" style={{ backgroundColor: "#626F47" }}>
-              <h5 className="card-title text-center text-white">Breakfast</h5>
-            </div>
-          </Link>
-
-          <Link to='/main-course' className="card col-2 mx-auto px-0 text-decoration-none mb-3" style={{ width: '12rem', boxShadow: "inset 0 0 10px rgba(0, 0, 0, 0.2)", backgroundColor: "000000" }}>
-            <img src={mainCourseImg} className="card-img-top" alt='' />
-            <div className="card-body" style={{ backgroundColor: "#626F47" }}>
-              <h5 className="card-title text-center text-white">Main Course</h5>
-            </div>
-          </Link>
-
-          <Link to='/drinks' className="card col-2 mx-auto px-0 text-decoration-none mb-3" style={{ width: '12rem', boxShadow: "inset 0 0 10px rgba(0, 0, 0, 0.2)", backgroundColor: "000000" }}>
-            <img src={drinksImg} className="card-img-top" alt='' />
-            <div className="card-body" style={{ backgroundColor: "#626F47" }}>
-              <h5 className="card-title text-center text-white">Drinks</h5>
-            </div>
-          </Link>
-
-          <Link to='/snacks' className="card col-2 mx-auto px-0 text-decoration-none mb-3" style={{ width: '12rem', boxShadow: "inset 0 0 10px rgba(0, 0, 0, 0.2)", backgroundColor: "000000" }}>
-            <img src={snacksImg} className="card-img-top" alt='' />
-            <div className="card-body" style={{ backgroundColor: "#626F47" }}>
-              <h5 className="card-title text-center text-white">Snacks</h5>
-            </div>
-          </Link>
-
-          <Link to='/soups-sandwiches' className="card col-2 mx-auto px-0 text-decoration-none mb-3" style={{ width: '12rem', boxShadow: "inset 0 0 10px rgba(0, 0, 0, 0.2)", backgroundColor: "000000" }}>
-            <img src={soupImg} className="card-img-top" alt='' />
-            <div className="card-body" style={{ backgroundColor: "#626F47" }}>
-              <h5 className="card-title text-center text-white">Sandwiches</h5>
-            </div>
-          </Link>
-
-        </div>
-      </div>
+      <Container maxWidth="lg" sx={{ mb: 8 }}>
+        <Typography 
+          variant="h3" 
+          component="h2" 
+          sx={{ 
+            textAlign: 'center', 
+            fontWeight: 'bold', 
+            mb: 4,
+            color: 'primary.main'
+          }}
+        >
+          What Will You Cook Next?
+        </Typography>
+        
+        <Grid container spacing={3} justifyContent="center">
+          {categoryItems.map((category, index) => (
+            <Grid item xs={6} sm={4} md={2} key={index}>
+              <Card 
+                component={Link} 
+                to={category.path}
+                sx={{ 
+                  height: '100%',
+                  textDecoration: 'none',
+                  transition: 'transform 0.3s ease, box-shadow 0.3s ease',
+                  '&:hover': {
+                    transform: 'scale(1.05)',
+                    boxShadow: 6
+                  }
+                }}
+              >
+                <CardMedia
+                  component="img"
+                  height="140"
+                  image={category.image}
+                  alt={category.name}
+                />
+                <CardContent 
+                  sx={{ 
+                    backgroundColor: 'primary.main', 
+                    textAlign: 'center',
+                    '&:hover': {
+                      backgroundColor: 'primary.dark'
+                    }
+                  }}
+                >
+                  <Typography 
+                    variant="h6" 
+                    component="h3" 
+                    sx={{ 
+                      color: 'white', 
+                      fontWeight: 'bold'
+                    }}
+                  >
+                    {category.name}
+                  </Typography>
+                </CardContent>
+              </Card>
+            </Grid>
+          ))}
+        </Grid>
+      </Container>
 
       {/* Top Recipes */}
-      <div className="Top-Recipes py-4" style={{ backgroundColor: "000000" }}>
-        <h1 className="fw-bold text-center">TOP RECIPES</h1>
-        <TopRecipes />
-      </div>
+      <Box sx={{ py: 6, backgroundColor: 'background.paper' }}>
+        <Container maxWidth="lg">
+          <Typography 
+            variant="h3" 
+            component="h2" 
+            sx={{ 
+              textAlign: 'center', 
+              fontWeight: 'bold', 
+              mb: 4,
+              color: 'primary.main'
+            }}
+          >
+            TOP RECIPES
+          </Typography>
+          <TopRecipes />
+        </Container>
+      </Box>
     </div>
   );
 }

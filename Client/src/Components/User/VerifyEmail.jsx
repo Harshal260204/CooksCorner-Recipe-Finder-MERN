@@ -1,9 +1,24 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import axios from 'axios';
-import './VerifyEmail.css';
+import { useTheme } from '../../context/ThemeContext';
+import {
+  Container,
+  Box,
+  Typography,
+  CircularProgress,
+  Alert,
+  AlertTitle,
+  Paper
+} from '@mui/material';
+import {
+  Email as EmailIcon,
+  CheckCircle as CheckCircleIcon,
+  Error as ErrorIcon
+} from '@mui/icons-material';
 
 const VerifyEmail = () => {
+  const { darkMode } = useTheme();
   const [loading, setLoading] = useState(true);
   const [message, setMessage] = useState('');
   const [isSuccess, setIsSuccess] = useState(false);
@@ -13,7 +28,8 @@ const VerifyEmail = () => {
   useEffect(() => {
     const verifyEmail = async () => {
       try {
-        const response = await axios.get(`/api/users/verify-email/${token}`);
+        // Update the API endpoint to match your backend
+        const response = await axios.get(`http://localhost:3000/users/verify-email/${token}`);
         setMessage(response.data.message);
         setIsSuccess(true);
         setLoading(false);
@@ -38,24 +54,69 @@ const VerifyEmail = () => {
   }, [token, navigate]);
 
   return (
-    <div className="verify-email-container">
-      <div className="verify-email-card">
-        <h2>Email Verification</h2>
+    <Container component="main" maxWidth="sm" sx={{ py: 8 }}>
+      <Paper 
+        elevation={6} 
+        sx={{ 
+          p: 4, 
+          borderRadius: 4,
+          backgroundColor: darkMode ? 'background.paper' : 'white',
+          textAlign: 'center'
+        }}
+      >
+        <EmailIcon 
+          sx={{ 
+            fontSize: 60, 
+            color: darkMode ? 'primary.main' : '#626F47',
+            mb: 2
+          }} 
+        />
+        
+        <Typography 
+          component="h1" 
+          variant="h4" 
+          sx={{ 
+            mb: 3,
+            fontWeight: 'bold',
+            color: darkMode ? 'primary.main' : '#626F47'
+          }}
+        >
+          Email Verification
+        </Typography>
+        
         {loading ? (
-          <div className="loading">
-            <div className="spinner"></div>
-            <p>Verifying your email...</p>
-          </div>
+          <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+            <CircularProgress size={60} sx={{ color: darkMode ? 'primary.main' : '#626F47', mb: 2 }} />
+            <Typography variant="h6">
+              Verifying your email...
+            </Typography>
+          </Box>
         ) : (
-          <div className={`message ${isSuccess ? 'success' : 'error'}`}>
-            <p>{message}</p>
+          <Box>
+            <Alert 
+              severity={isSuccess ? "success" : "error"}
+              sx={{ 
+                mb: 2,
+                '& .MuiAlert-icon': {
+                  color: isSuccess ? 'success.main' : 'error.main'
+                }
+              }}
+            >
+              <AlertTitle>
+                {isSuccess ? "Success" : "Error"}
+              </AlertTitle>
+              {message}
+            </Alert>
+            
             {isSuccess && (
-              <p>You will be redirected to the login page shortly...</p>
+              <Typography variant="body1" sx={{ mt: 2 }}>
+                You will be redirected to the login page shortly...
+              </Typography>
             )}
-          </div>
+          </Box>
         )}
-      </div>
-    </div>
+      </Paper>
+    </Container>
   );
 };
 

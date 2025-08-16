@@ -32,46 +32,49 @@ import UserProtectedRoutes from './ProtectedRoutes/UserProtectedRoutes'
 function App() {
   return (
     <BrowserRouter>
-      <Navbar />
-      <Routes>
-        {/* Public Routes */}
-        <Route path="/" element={<Homepage />} />
-        <Route path="/login-page" element={<LoginPage />} />
-        <Route path="/register-page" element={<RegisterPage />} />
-        <Route path="/recipes" element={<Recipes />} />
-        <Route path="/breakfast" element={<Breakfast />} />
-        <Route path="/main-course" element={<MainCourse />} />
-        <Route path="/desert" element={<Desert />} />
-        <Route path="/snacks" element={<Snacks />} />
-        <Route path="/drinks" element={<Drinks />} />
-        <Route path="/soups-sandwiches" element={<Drinks />} />
-        <Route path="/contact-us" element={<ContactUs />} />
-        <Route path="/verify-email/:token" element={<VerifyEmail />} />
-        <Route path="/forgot-password" element={<ForgotPassword />} />
-        <Route path="/reset-password/:token" element={<ResetPassword />} />
+      <div className="flex flex-col min-h-screen">
+        <Navbar />
+        <main className="flex-grow">
+          <Routes>
+            {/* Public Routes */}
+            <Route path="/" element={<Homepage />} />
+            <Route path="/login-page" element={<LoginPage />} />
+            <Route path="/register-page" element={<RegisterPage />} />
+            <Route path="/recipes" element={<Recipes />} />
+            <Route path="/breakfast" element={<Breakfast />} />
+            <Route path="/main-course" element={<MainCourse />} />
+            <Route path="/desert" element={<Desert />} />
+            <Route path="/snacks" element={<Snacks />} />
+            <Route path="/drinks" element={<Drinks />} />
+            <Route path="/soups-sandwiches" element={<Drinks />} />
+            <Route path="/contact-us" element={<ContactUs />} />
+            <Route path="/verify-email/:token" element={<VerifyEmail />} />
+            <Route path="/forgot-password" element={<ForgotPassword />} />
+            <Route path="/reset-password/:token" element={<ResetPassword />} />
 
-        {/* User Protected Routes */}
-        <Route element={<UserProtectedRoutes />}>
-          <Route path="/premium-cookbooks" element={<CookBooks />} />
-          <Route path="/cart" element={<CartPage />} />
-          <Route path="/profile" element={<UserProfile />} />
-        </Route>
+            {/* User Protected Routes */}
+            <Route element={<UserProtectedRoutes />}>
+              <Route path="/premium-cookbooks" element={<CookBooks />} />
+              <Route path="/cart" element={<CartPage />} />
+              <Route path="/profile" element={<UserProfile />} />
+            </Route>
 
-        {/* Admin Protected Routes */}
-        <Route element={<AdminProtectedRoutes />}>
-          <Route path="/admin" element={<Admin />}>
-            <Route index element={<AdminDashboard />} />
-            <Route path="all-recipes" element={<AllRecipes />} />
-            <Route path="create-recipe" element={<CreateRecipeForm />} />
-            <Route path="all-users" element={<AllUsers />} />
-          </Route>
-        </Route>
+            {/* Admin Protected Routes */}
+            <Route element={<AdminProtectedRoutes />}>
+              <Route path="/admin" element={<Admin />}>
+                <Route index element={<AdminDashboard />} />
+                <Route path="all-recipes" element={<AllRecipes />} />
+                <Route path="create-recipe" element={<CreateRecipeForm />} />
+                <Route path="all-users" element={<AllUsers />} />
+              </Route>
+            </Route>
 
-        {/* Admin Login (Public) */}
-        <Route path="/admin-login" element={<AdminLogin />} />
-
-      </Routes>
-      <Footer />
+            {/* Admin Login (Public) */}
+            <Route path="/admin-login" element={<AdminLogin />} />
+          </Routes>
+        </main>
+        <Footer />
+      </div>
     </BrowserRouter>
   )
 }

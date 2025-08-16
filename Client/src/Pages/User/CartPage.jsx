@@ -2,8 +2,25 @@ import React from 'react'
 import CartCard from '../../Components/User/CartCard'
 import { useSelector, useDispatch } from 'react-redux'
 import { clearCart } from '../../Store/cartSlice'
+import { useTheme } from '../../context/ThemeContext';
+import {
+  Container,
+  Typography,
+  Grid,
+  Card,
+  CardContent,
+  Button,
+  Divider,
+  Box,
+  Alert
+} from '@mui/material';
+import {
+  ShoppingCart as ShoppingCartIcon,
+  Delete as DeleteIcon
+} from '@mui/icons-material';
 
 const CartPage = () => {
+    const { darkMode } = useTheme();
     const cartItems = useSelector(state => state.cart)
     const dispatch = useDispatch()
 
@@ -21,52 +38,98 @@ const CartPage = () => {
     };
 
     return (
-        <div className="container mt-4">
-            <h2 className="mb-4">Your Shopping Cart</h2>
+        <Container maxWidth="lg" sx={{ py: 8 }}>
+            <Typography 
+                variant="h3" 
+                component="h1" 
+                align="center" 
+                sx={{ 
+                    mb: 6,
+                    fontWeight: 'bold',
+                    color: darkMode ? 'primary.main' : '#626F47'
+                }}
+            >
+                Your Shopping Cart
+            </Typography>
             
             {cartItems.length === 0 ? (
-                <div className="text-center">
-                    <h4>Your cart is empty</h4>
-                    <p>Add some delicious cookbooks to your cart!</p>
-                </div>
+                <Alert severity="info" sx={{ justifyContent: 'center', py: 8 }}>
+                    <Typography variant="h5" align="center">
+                        Your cart is empty
+                    </Typography>
+                    <Typography variant="body1" align="center" sx={{ mt: 2 }}>
+                        Add some delicious cookbooks to your cart!
+                    </Typography>
+                </Alert>
             ) : (
-                <>
-                    <div className="row">
-                        <div className="col-md-8">
-                            {cartItems.map((data, index) => {
-                                return <CartCard key={index} data={data} />
-                            })}
-                        </div>
-                        <div className="col-md-4">
-                            <div className="card">
-                                <div className="card-header">
-                                    <h5>Order Summary</h5>
-                                </div>
-                                <div className="card-body">
-                                    <div className="d-flex justify-content-between">
-                                        <span>Items ({cartItems.length})</span>
-                                        <span>₹{totalPrice.toFixed(2)}</span>
-                                    </div>
-                                    <div className="d-flex justify-content-between mt-2">
-                                        <span>Shipping</span>
-                                        <span>Free</span>
-                                    </div>
-                                    <hr />
-                                    <div className="d-flex justify-content-between fw-bold">
-                                        <span>Total</span>
-                                        <span className="text-success">₹{totalPrice.toFixed(2)}</span>
-                                    </div>
-                                    <button className="btn btn-success w-100 mt-3">Proceed to Checkout</button>
-                                    <button className="btn btn-outline-danger w-100 mt-2" onClick={handleClearCart}>
-                                        Clear Cart
-                                    </button>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </>
+                <Grid container spacing={4}>
+                    <Grid item xs={12} md={8}>
+                        {cartItems.map((data, index) => {
+                            return <CartCard key={index} data={data} />
+                        })}
+                    </Grid>
+                    <Grid item xs={12} md={4}>
+                        <Card sx={{ 
+                            borderRadius: 4,
+                            backgroundColor: darkMode ? 'background.paper' : 'white'
+                        }}>
+                            <CardContent>
+                                <Typography variant="h5" component="h2" sx={{ mb: 3, fontWeight: 'bold' }}>
+                                    Order Summary
+                                </Typography>
+                                
+                                <Box sx={{ display: 'flex', justifyContent: 'space-between', mb: 2 }}>
+                                    <Typography variant="body1">Items ({cartItems.length})</Typography>
+                                    <Typography variant="body1">₹{totalPrice.toFixed(2)}</Typography>
+                                </Box>
+                                
+                                <Box sx={{ display: 'flex', justifyContent: 'space-between', mb: 2 }}>
+                                    <Typography variant="body1">Shipping</Typography>
+                                    <Typography variant="body1" sx={{ color: 'success.main' }}>Free</Typography>
+                                </Box>
+                                
+                                <Divider sx={{ my: 2 }} />
+                                
+                                <Box sx={{ display: 'flex', justifyContent: 'space-between', mb: 3 }}>
+                                    <Typography variant="h6" sx={{ fontWeight: 'bold' }}>Total</Typography>
+                                    <Typography variant="h6" sx={{ fontWeight: 'bold', color: 'success.main' }}>
+                                        ₹{totalPrice.toFixed(2)}
+                                    </Typography>
+                                </Box>
+                                
+                                <Button 
+                                    variant="contained" 
+                                    color="success" 
+                                    fullWidth
+                                    size="large"
+                                    sx={{ 
+                                        py: 1.5,
+                                        mb: 2,
+                                        backgroundColor: darkMode ? 'success.main' : '#22c55e',
+                                        '&:hover': {
+                                            backgroundColor: darkMode ? 'success.dark' : '#16a34a'
+                                        }
+                                    }}
+                                >
+                                    Proceed to Checkout
+                                </Button>
+                                
+                                <Button 
+                                    variant="outlined" 
+                                    color="error" 
+                                    fullWidth
+                                    startIcon={<DeleteIcon />}
+                                    onClick={handleClearCart}
+                                    sx={{ py: 1.5 }}
+                                >
+                                    Clear Cart
+                                </Button>
+                            </CardContent>
+                        </Card>
+                    </Grid>
+                </Grid>
             )}
-        </div>
+        </Container>
     )
 }
 

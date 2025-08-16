@@ -2,6 +2,22 @@ import React from 'react';
 import { assets } from '../../assets/assets';
 import { useDispatch, useSelector } from 'react-redux';
 import { addToCart } from '../../Store/cartSlice';
+import { useTheme } from '../../context/ThemeContext';
+import {
+  Container,
+  Typography,
+  Grid,
+  Card,
+  CardMedia,
+  CardContent,
+  CardActions,
+  Button,
+  Box
+} from '@mui/material';
+import {
+  AddShoppingCart as AddShoppingCartIcon,
+  ShoppingCart as ShoppingCartIcon
+} from '@mui/icons-material';
 
 const cookbooks = [
   {
@@ -49,89 +65,190 @@ const cookbooks = [
 ];
 
 const CookbookCard = () => {
+  const { darkMode } = useTheme();
+  const dispatch = useDispatch();
+  const cartItems = useSelector(state => state.cart);
 
-  const dispatch = useDispatch()
-
-  const selector = useSelector(state => state.cart)
-  console.log(selector);
+  const handleAddToCart = (book) => {
+    dispatch(addToCart(book));
+  };
 
   return (
-    <div className="d-flex flex-wrap justify-content-center content">
-      {cookbooks.map(book => (
-        <div key={book.id} className="card m-3" style={{
-          width: "18rem",
-          border: "none",
-          borderRadius: "12px",
-          overflow: "hidden",
-          backgroundColor: "#DDEB9D",  // Matching top recipe card background color
-          boxShadow: "0 8px 16px rgba(0, 0, 0, 0.1)",
-          transition: "transform 0.3s ease, box-shadow 0.3s ease",
-        }}>
-          <img src={book.img} className="card-img-top" alt={book.name} style={{
-            height: "200px",
-            objectFit: "cover"
-          }} />
-          <div className="card-body" style={{
-            padding: "1.2rem",
-            backgroundColor: "#DDEB9D", // Consistent background color
-            color: "#2b2d42",
-          }}>
-            <h5 className="BookName" style={{
-              fontSize: "1.1rem",
-              fontWeight: "600",
-              color: "#626F47",  // Consistent color
-            }}>
-              {book.name}
-            </h5>
-            <p className="card-text" style={{
-              fontSize: "14px",
-              color: "#2b2d42",
-              height: "40px",
-              overflow: "hidden",
-              textOverflow: "ellipsis",
-              display: "-webkit-box",
-              WebkitLineClamp: 2,
-              WebkitBoxOrient: "vertical",
-            }}>
-              {book.description}
-            </p>
-            <p className="card-price" style={{
-              fontSize: "16px",
-              fontWeight: "bold",
-              color: "#000"
-            }}>
-              {book.price}
-            </p>
-            <div className="d-flex justify-content-between align-items-center mt-3">
-              <button className="btn" onClick={() => dispatch(addToCart(book))} style={{
-                backgroundColor: "#626F47",  // Green button
-                color: "#fff",
-                borderRadius: "25px",
-                padding: "0.5rem 1rem",
-                textTransform: "uppercase",
-                fontWeight: "bold",
-                border: "none",
-                cursor: "pointer",
+    <Container maxWidth="lg" sx={{ py: 8 }}>
+      <Typography 
+        variant="h3" 
+        component="h1" 
+        align="center" 
+        sx={{ 
+          mb: 6,
+          fontWeight: 'bold',
+          color: darkMode ? 'primary.main' : '#626F47'
+        }}
+      >
+        Premium Cookbooks
+      </Typography>
+      
+      <Typography 
+        variant="h6" 
+        align="center" 
+        sx={{ 
+          mb: 6,
+          color: 'text.secondary'
+        }}
+      >
+        Discover our collection of premium cookbooks to enhance your culinary skills
+      </Typography>
+      
+      <Grid container spacing={4}>
+        {cookbooks.map(book => (
+          <Grid item xs={12} sm={6} md={4} key={book.id}>
+            <Card 
+              sx={{ 
+                height: '100%',
+                display: 'flex',
+                flexDirection: 'column',
+                borderRadius: '12px',
+                overflow: 'hidden',
+                boxShadow: 3,
+                transition: 'transform 0.3s ease, box-shadow 0.3s ease',
+                backgroundColor: darkMode ? 'background.paper' : '#DDEB9D',
+                '&:hover': {
+                  transform: 'translateY(-4px)',
+                  boxShadow: 6
+                }
+              }}
+            >
+              <CardMedia
+                component="img"
+                height="200"
+                image={book.img}
+                alt={book.name}
+                sx={{ objectFit: 'cover' }}
+              />
+              <CardContent 
+                sx={{ 
+                  flexGrow: 1,
+                  backgroundColor: darkMode ? 'background.paper' : '#DDEB9D',
+                  color: darkMode ? 'text.primary' : '#2b2d42',
+                  display: 'flex',
+                  flexDirection: 'column'
+                }}
+              >
+                <Typography 
+                  gutterBottom 
+                  variant="h6" 
+                  component="h3" 
+                  sx={{ 
+                    textAlign: 'center',
+                    fontWeight: 600,
+                    color: darkMode ? 'primary.main' : '#626F47',
+                    mb: 1
+                  }}
+                >
+                  {book.name}
+                </Typography>
+                
+                <Typography 
+                  variant="body2" 
+                  sx={{ 
+                    textAlign: 'center',
+                    color: darkMode ? 'text.primary' : '#2b2d42',
+                    mb: 2,
+                    flexGrow: 1,
+                    overflow: 'hidden',
+                    textOverflow: 'ellipsis',
+                    display: '-webkit-box',
+                    WebkitLineClamp: 2,
+                    WebkitBoxOrient: 'vertical'
+                  }}
+                >
+                  {book.description}
+                </Typography>
+                
+                <Typography 
+                  variant="h6" 
+                  sx={{ 
+                    textAlign: 'center',
+                    fontWeight: 'bold',
+                    color: darkMode ? 'text.primary' : '#000',
+                    mb: 2
+                  }}
+                >
+                  {book.price}
+                </Typography>
+              </CardContent>
+              
+              <CardActions sx={{ 
+                justifyContent: 'space-between', 
+                backgroundColor: darkMode ? 'background.paper' : '#DDEB9D',
+                px: 2,
+                pb: 2
               }}>
-                Add to Cart
-              </button>
-              <button className="btn" style={{
-                backgroundColor: "#626F47",  // Green button
-                color: "#fff",
-                borderRadius: "25px",
-                padding: "0.5rem 1rem",
-                textTransform: "uppercase",
-                fontWeight: "bold",
-                border: "none",
-                cursor: "pointer",
-              }}>
-                Buy Now
-              </button>
-            </div>
-          </div>
-        </div>
-      ))}
-    </div>
+                <Button
+                  variant="contained"
+                  color="primary"
+                  startIcon={<AddShoppingCartIcon />}
+                  onClick={() => handleAddToCart(book)}
+                  sx={{ 
+                    backgroundColor: darkMode ? 'primary.main' : '#626F47',
+                    color: 'white',
+                    borderRadius: '25px',
+                    padding: '6px 12px',
+                    textTransform: 'uppercase',
+                    fontWeight: 'bold',
+                    '&:hover': {
+                      backgroundColor: darkMode ? 'primary.dark' : '#4a5a35'
+                    }
+                  }}
+                >
+                  Add to Cart
+                </Button>
+                
+                <Button
+                  variant="outlined"
+                  color="primary"
+                  startIcon={<ShoppingCartIcon />}
+                  sx={{ 
+                    borderRadius: '25px',
+                    padding: '6px 12px',
+                    textTransform: 'uppercase',
+                    fontWeight: 'bold',
+                    color: darkMode ? 'primary.main' : '#626F47',
+                    borderColor: darkMode ? 'primary.main' : '#626F47',
+                    '&:hover': {
+                      backgroundColor: darkMode ? 'primary.main' : '#626F47',
+                      color: 'white',
+                      borderColor: darkMode ? 'primary.main' : '#626F47'
+                    }
+                  }}
+                >
+                  Buy Now
+                </Button>
+              </CardActions>
+            </Card>
+          </Grid>
+        ))}
+      </Grid>
+      
+      <Box sx={{ mt: 6, textAlign: 'center' }}>
+        <Typography variant="body1" sx={{ mb: 2 }}>
+          Items in your cart: {cartItems.length}
+        </Typography>
+        <Button 
+          variant="contained" 
+          color="secondary"
+          href="/cart"
+          sx={{ 
+            backgroundColor: darkMode ? 'secondary.main' : '#f97316',
+            '&:hover': {
+              backgroundColor: darkMode ? 'secondary.dark' : '#ea580c'
+            }
+          }}
+        >
+          View Cart
+        </Button>
+      </Box>
+    </Container>
   );
 };
 

@@ -1,98 +1,131 @@
 import React from "react";
+import {
+  Card,
+  CardMedia,
+  CardContent,
+  Typography,
+  Button,
+  Box,
+  Rating
+} from '@mui/material';
+import { useTheme } from '../../context/ThemeContext';
 
 const RecipeCard = ({ recipe }) => {
-  // Function to render star ratings
-  const renderRating = (rating) => {
-    const stars = [];
-    const fullStars = Math.floor(rating);
-    const hasHalfStar = rating % 1 >= 0.5;
-    
-    for (let i = 0; i < fullStars; i++) {
-      stars.push(<span key={i} className="text-warning">★</span>);
-    }
-    
-    if (hasHalfStar) {
-      stars.push(<span key="half" className="text-warning">☆</span>);
-    }
-    
-    const emptyStars = 5 - stars.length;
-    for (let i = 0; i < emptyStars; i++) {
-      stars.push(<span key={`empty-${i}`} className="text-warning">☆</span>);
-    }
-    
-    return <div>{stars}</div>;
-  };
-
+  const { darkMode } = useTheme();
+  
   // Determine image source - use uploaded image if available, otherwise use default
   const imageSrc = recipe.imageUrl ? `http://localhost:3000${recipe.imageUrl}` : recipe.img;
 
   return (
-    <div className="card m-3" style={{
-      width: "18rem",
-      border: "none",
-      borderRadius: "12px",
-      overflow: "hidden",
-      backgroundColor: "#DDEB9D",  // Matching background color
-      boxShadow: "0 8px 16px rgba(0, 0, 0, 0.1)",
-      transition: "transform 0.3s ease, box-shadow 0.3s ease",
-    }}>
-      <img src={imageSrc} className="card-img-top" alt={recipe.name} style={{
-        height: "200px",
-        objectFit: "cover",
-      }} />
-      <div className="card-body" style={{
-        padding: "1.2rem",
-        backgroundColor: "#DDEB9D",  // Matching background color
-        color: "#2b2d42",
-      }}>
-        <h5 className="RecipeName text-center" style={{
-          fontSize: "1.1rem",
-          fontWeight: "600",
-          color: "#626F47",  // Matching text color
-        }}>
+    <Card 
+      sx={{ 
+        height: '100%',
+        display: 'flex',
+        flexDirection: 'column',
+        borderRadius: '12px',
+        overflow: 'hidden',
+        boxShadow: 3,
+        transition: 'transform 0.3s ease, box-shadow 0.3s ease',
+        backgroundColor: darkMode ? 'background.paper' : '#DDEB9D',
+        '&:hover': {
+          transform: 'translateY(-4px)',
+          boxShadow: 6
+        }
+      }}
+    >
+      <CardMedia
+        component="img"
+        height="200"
+        image={imageSrc}
+        alt={recipe.name}
+        sx={{ objectFit: 'cover' }}
+      />
+      <CardContent 
+        sx={{ 
+          flexGrow: 1,
+          backgroundColor: darkMode ? 'background.paper' : '#DDEB9D',
+          color: darkMode ? 'text.primary' : '#2b2d42',
+          display: 'flex',
+          flexDirection: 'column'
+        }}
+      >
+        <Typography 
+          gutterBottom 
+          variant="h6" 
+          component="h3" 
+          sx={{ 
+            textAlign: 'center',
+            fontWeight: 600,
+            color: darkMode ? 'primary.main' : '#626F47',
+            mb: 1
+          }}
+        >
           {recipe.name}
-        </h5>
-        <h6 className="RecipeType text-center" style={{
-          fontSize: "1rem",
-          color: "#626F47",  // Consistent color for type
-          marginBottom: "10px",
-        }}>
+        </Typography>
+        
+        <Typography 
+          variant="subtitle1" 
+          sx={{ 
+            textAlign: 'center',
+            color: darkMode ? 'primary.main' : '#626F47',
+            mb: 2
+          }}
+        >
           {recipe.type}
-        </h6>
-        <p className="card-text text-center" style={{
-          fontSize: "14px",
-          color: "#2b2d42",
-          height: "60px",
-          overflow: "hidden",
-          textOverflow: "ellipsis",
-        }}>
+        </Typography>
+        
+        <Typography 
+          variant="body2" 
+          sx={{ 
+            textAlign: 'center',
+            color: darkMode ? 'text.primary' : '#2b2d42',
+            mb: 2,
+            flexGrow: 1,
+            overflow: 'hidden',
+            textOverflow: 'ellipsis',
+            display: '-webkit-box',
+            WebkitLineClamp: 3,
+            WebkitBoxOrient: 'vertical'
+          }}
+        >
           {recipe.description}
-        </p>
+        </Typography>
         
         {/* Rating Display */}
-        <div className="d-flex justify-content-center align-items-center mb-2">
-          {renderRating(recipe.averageRating || 0)}
-          <span className="ms-2">({recipe.ratings ? recipe.ratings.length : 0})</span>
-        </div>
+        <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', mb: 2 }}>
+          <Rating 
+            value={recipe.averageRating || 0} 
+            precision={0.5} 
+            readOnly 
+            sx={{ color: '#fbbf24' }} // amber-400
+          />
+          <Typography variant="body2" sx={{ ml: 1 }}>
+            ({recipe.ratings ? recipe.ratings.length : 0})
+          </Typography>
+        </Box>
         
-        <div className="d-flex justify-content-center align-items-center mt-3">
-          <a href="#" className="btn" style={{
-            backgroundColor: "#626F47",  // Green button
-            color: "#fff",
-            borderRadius: "25px",
-            padding: "0.5rem 1rem",
-            textTransform: "uppercase",
-            fontWeight: "bold",
-            border: "none",
-            cursor: "pointer",
-          }}>
+        <Box sx={{ mt: 'auto', display: 'flex', justifyContent: 'center' }}>
+          <Button 
+            variant="contained" 
+            color="primary"
+            sx={{ 
+              backgroundColor: darkMode ? 'primary.main' : '#626F47',
+              color: 'white',
+              borderRadius: '25px',
+              padding: '8px 16px',
+              textTransform: 'uppercase',
+              fontWeight: 'bold',
+              '&:hover': {
+                backgroundColor: darkMode ? 'primary.dark' : '#4a5a35'
+              }
+            }}
+          >
             View Recipe
-          </a>
-        </div>
-      </div>
-    </div>
+          </Button>
+        </Box>
+      </CardContent>
+    </Card>
   );
 };
 
 export default RecipeCard;
-

@@ -2,8 +2,26 @@ import React, { useState, useContext } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { AuthContext } from '../../context/AuthContext';
 import axios from 'axios';
+import { useTheme } from '../../context/ThemeContext';
+import {
+  Container,
+  Box,
+  Typography,
+  TextField,
+  Button,
+  CircularProgress,
+  Alert,
+  AlertTitle,
+  Paper
+} from '@mui/material';
+import {
+  Email as EmailIcon,
+  Lock as LockIcon,
+  AdminPanelSettings as AdminPanelSettingsIcon
+} from '@mui/icons-material';
 
 const AdminLogin = () => {
+  const { darkMode } = useTheme();
   const navigate = useNavigate();
   const { setUser, setToken } = useContext(AuthContext);
   
@@ -14,6 +32,7 @@ const AdminLogin = () => {
   
   const [errors, setErrors] = useState({});
   const [loading, setLoading] = useState(false);
+  const [apiError, setApiError] = useState('');
   
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -22,6 +41,11 @@ const AdminLogin = () => {
     // Clear error when user starts typing
     if (errors[name]) {
       setErrors({ ...errors, [name]: '' });
+    }
+    
+    // Clear API error when user starts typing
+    if (apiError) {
+      setApiError('');
     }
   };
   
@@ -41,6 +65,7 @@ const AdminLogin = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
+    setApiError('');
     
     const newErrors = validateForm();
     if (Object.keys(newErrors).length > 0) {
@@ -67,15 +92,14 @@ const AdminLogin = () => {
         setUser(adminData);
         
         setFormData({ email: '', password: '' });
-        alert('Admin Login Successful');
         navigate('/admin');
       }
     } catch (error) {
       console.error('Error during admin login:', error);
       if (error.response?.data?.message) {
-        alert(error.response.data.message);
+        setApiError(error.response.data.message);
       } else {
-        alert('An error occurred. Please try again.');
+        setApiError('An error occurred. Please try again.');
       }
     } finally {
       setLoading(false);
@@ -83,49 +107,107 @@ const AdminLogin = () => {
   };
   
   return (
-    <div className="container mt-5 d-flex justify-content-center">
-      <div className="card p-4 shadow-lg" style={{ maxWidth: '400px', width: '100%', borderRadius: '20px' }}>
-        <h3 className="text-center mb-4" style={{ color: '#626F47', fontWeight: 'bold' }}>Admin Login</h3>
-        <form onSubmit={handleSubmit}>
-          <div className="mb-3">
-            <label htmlFor="email" className="form-label">Email Address</label>
-            <input
-              type="email"
-              className={`form-control ${errors.email ? 'is-invalid' : ''}`}
-              id="email"
-              name="email"
-              placeholder="Enter admin email"
-              value={formData.email}
-              onChange={handleChange}
-              required
-            />
-            {errors.email && <div className="invalid-feedback">{errors.email}</div>}
-          </div>
-          <div className="mb-3">
-            <label htmlFor="password" className="form-label">Password</label>
-            <input
-              type="password"
-              className={`form-control ${errors.password ? 'is-invalid' : ''}`}
-              id="password"
-              name="password"
-              placeholder="Enter admin password"
-              value={formData.password}
-              onChange={handleChange}
-              required
-            />
-            {errors.password && <div className="invalid-feedback">{errors.password}</div>}
-          </div>
-          <button
+    <Container component="main" maxWidth="sm" sx={{ py: 8 }}>
+      <Paper 
+        elevation={6} 
+        sx={{ 
+          p: 4, 
+          borderRadius: 4,
+          backgroundColor: darkMode ? 'background.paper' : 'white'
+        }}
+      >
+        <AdminPanelSettingsIcon 
+          sx={{ 
+            fontSize: 60, 
+            color: darkMode ? 'primary.main' : '#626F47',
+            display: 'block',
+            margin: '0 auto 16px'
+          }} 
+        />
+        
+        <Typography 
+          component="h1" 
+          variant="h4" 
+          align="center" 
+          sx={{ 
+            mb: 3,
+            fontWeight: 'bold',
+            color: darkMode ? 'primary.main' : '#626F47'
+          }}
+        >
+          Admin Login
+        </Typography>
+        
+        {apiError && (
+          <Alert severity="error" sx={{ mb: 2 }}>
+            <AlertTitle>Error</AlertTitle>
+            {apiError}
+          </Alert>
+        )}
+        
+        <Box component="form" onSubmit={handleSubmit} sx={{ mt: 2 }}>
+          <TextField
+            variant="outlined"
+            margin="normal"
+            required
+            fullWidth
+            id="email"
+            label="Admin Email Address"
+            name="email"
+            autoComplete="email"
+            autoFocus
+            value={formData.email}
+            onChange={handleChange}
+            error={!!errors.email}
+            helperText={errors.email}
+            InputProps={{
+              startAdornment: <EmailIcon sx={{ mr: 1, my: 0.5 }} />,
+            }}
+            sx={{ mb: 2 }}
+          />
+          
+          <TextField
+            variant="outlined"
+            margin="normal"
+            required
+            fullWidth
+            name="password"
+            label="Admin Password"
+            type="password"
+            id="password"
+            autoComplete="current-password"
+            value={formData.password}
+            onChange={handleChange}
+            error={!!errors.password}
+            helperText={errors.password}
+            InputProps={{
+              startAdornment: <LockIcon sx={{ mr: 1, my: 0.5 }} />,
+            }}
+            sx={{ mb: 2 }}
+          />
+          
+          <Button
             type="submit"
-            className="btn w-100"
-            style={{ backgroundColor: '#626F47', color: 'white' }}
+            fullWidth
+            variant="contained"
+            color="primary"
+            size="large"
             disabled={loading}
+            sx={{ 
+              mt: 3, 
+              mb: 2, 
+              py: 1.5,
+              backgroundColor: darkMode ? 'primary.main' : '#626F47',
+              '&:hover': {
+                backgroundColor: darkMode ? 'primary.dark' : '#4a5a35'
+              }
+            }}
           >
-            {loading ? 'Logging in...' : 'Login'}
-          </button>
-        </form>
-      </div>
-    </div>
+            {loading ? <CircularProgress size={24} sx={{ color: 'white' }} /> : 'Login'}
+          </Button>
+        </Box>
+      </Paper>
+    </Container>
   );
 };
 

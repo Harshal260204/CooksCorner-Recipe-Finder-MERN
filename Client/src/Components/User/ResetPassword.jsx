@@ -1,8 +1,24 @@
 import React, { useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import axios from 'axios';
+import { useTheme } from '../../context/ThemeContext';
+import {
+  Container,
+  Box,
+  Typography,
+  TextField,
+  Button,
+  CircularProgress,
+  Alert,
+  AlertTitle,
+  Paper
+} from '@mui/material';
+import {
+  Lock as LockIcon
+} from '@mui/icons-material';
 
 const ResetPassword = () => {
+  const { darkMode } = useTheme();
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
   const [message, setMessage] = useState('');
@@ -16,6 +32,11 @@ const ResetPassword = () => {
     
     if (password !== confirmPassword) {
       setError('Passwords do not match');
+      return;
+    }
+    
+    if (password.length < 6) {
+      setError('Password must be at least 6 characters long');
       return;
     }
     
@@ -43,52 +64,115 @@ const ResetPassword = () => {
   };
 
   return (
-    <div className="container mt-5">
-      <div className="row justify-content-center">
-        <div className="col-md-6">
-          <div className="card">
-            <div className="card-body">
-              <h3 className="text-center mb-4">Reset Password</h3>
-              {message && <div className="alert alert-success">{message}</div>}
-              {error && <div className="alert alert-danger">{error}</div>}
-              <form onSubmit={handleSubmit}>
-                <div className="mb-3">
-                  <label htmlFor="password" className="form-label">New Password</label>
-                  <input
-                    type="password"
-                    className="form-control"
-                    id="password"
-                    value={password}
-                    onChange={(e) => setPassword(e.target.value)}
-                    required
-                    minLength="6"
-                  />
-                  <div className="form-text">Password must be at least 6 characters long.</div>
-                </div>
-                <div className="mb-3">
-                  <label htmlFor="confirmPassword" className="form-label">Confirm New Password</label>
-                  <input
-                    type="password"
-                    className="form-control"
-                    id="confirmPassword"
-                    value={confirmPassword}
-                    onChange={(e) => setConfirmPassword(e.target.value)}
-                    required
-                  />
-                </div>
-                <button 
-                  type="submit" 
-                  className="btn btn-primary w-100" 
-                  disabled={loading}
-                >
-                  {loading ? 'Resetting...' : 'Reset Password'}
-                </button>
-              </form>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
+    <Container component="main" maxWidth="sm" sx={{ py: 8 }}>
+      <Paper 
+        elevation={6} 
+        sx={{ 
+          p: 4, 
+          borderRadius: 4,
+          backgroundColor: darkMode ? 'background.paper' : 'white'
+        }}
+      >
+        <Typography 
+          component="h1" 
+          variant="h4" 
+          align="center" 
+          sx={{ 
+            mb: 3,
+            fontWeight: 'bold',
+            color: darkMode ? 'primary.main' : '#626F47'
+          }}
+        >
+          Reset Password
+        </Typography>
+        
+        <Typography 
+          variant="body1" 
+          align="center" 
+          sx={{ 
+            mb: 3,
+            color: 'text.secondary'
+          }}
+        >
+          Enter your new password below
+        </Typography>
+        
+        {message && (
+          <Alert severity="success" sx={{ mb: 2 }}>
+            <AlertTitle>Success</AlertTitle>
+            {message}
+          </Alert>
+        )}
+        
+        {error && (
+          <Alert severity="error" sx={{ mb: 2 }}>
+            <AlertTitle>Error</AlertTitle>
+            {error}
+          </Alert>
+        )}
+        
+        <Box component="form" onSubmit={handleSubmit} sx={{ mt: 2 }}>
+          <TextField
+            variant="outlined"
+            margin="normal"
+            required
+            fullWidth
+            name="password"
+            label="New Password"
+            type="password"
+            id="password"
+            autoComplete="new-password"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            InputProps={{
+              startAdornment: <LockIcon sx={{ mr: 1, my: 0.5 }} />,
+            }}
+            sx={{ mb: 2 }}
+          />
+          <Typography variant="caption" display="block" sx={{ mb: 2, color: 'text.secondary' }}>
+            Password must be at least 6 characters long.
+          </Typography>
+          
+          <TextField
+            variant="outlined"
+            margin="normal"
+            required
+            fullWidth
+            name="confirmPassword"
+            label="Confirm New Password"
+            type="password"
+            id="confirmPassword"
+            autoComplete="new-password"
+            value={confirmPassword}
+            onChange={(e) => setConfirmPassword(e.target.value)}
+            InputProps={{
+              startAdornment: <LockIcon sx={{ mr: 1, my: 0.5 }} />,
+            }}
+            sx={{ mb: 2 }}
+          />
+          
+          <Button
+            type="submit"
+            fullWidth
+            variant="contained"
+            color="primary"
+            size="large"
+            disabled={loading}
+            sx={{ 
+              mt: 3, 
+              mb: 2, 
+              py: 1.5,
+              backgroundColor: darkMode ? 'primary.main' : '#626F47',
+              '&:hover': {
+                backgroundColor: darkMode ? 'primary.dark' : '#4a5a35'
+              }
+            }}
+          >
+            {loading ? <CircularProgress size={24} sx={{ color: 'white' }} /> : 'Reset Password'}
+          </Button>
+        </Box>
+      </Paper>
+    </Container>
   );
 };
 

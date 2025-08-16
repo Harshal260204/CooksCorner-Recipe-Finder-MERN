@@ -1,0 +1,129 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Custom CSS variables for light and dark modes */
+:root {
+  --background-color-light: #ffffff;
+  --text-color-light: #333333;
+  --card-background-light: #f8f9fa;
+  --border-color-light: #e0e0e0;
+  
+  --background-color-dark: #1a202c;
+  --text-color-dark: #e2e8f0;
+  --card-background-dark: #2d3748;
+  --border-color-dark: #4a5568;
+}
+
+/* Dark mode styles */
+.dark {
+  --background-color: var(--background-color-dark);
+  --text-color: var(--text-color-dark);
+  --card-background: var(--card-background-dark);
+  --border-color: var(--border-color-dark);
+}
+
+/* Light mode styles */
+.light {
+  --background-color: var(--background-color-light);
+  --text-color: var(--text-color-light);
+  --card-background: var(--card-background-light);
+  --border-color: var(--border-color-light);
+}
+
+/* Default to light mode */
+:root {
+  --background-color: var(--background-color-light);
+  --text-color: var(--text-color-light);
+  --card-background: var(--card-background-light);
+  --border-color: var(--border-color-light);
+}
+
+/* Apply theme variables */
+body {
+  background-color: var(--background-color);
+  color: var(--text-color);
+  transition: background-color 0.3s, color 0.3s;
+}
+
+/* Custom components */
+.recipe-card {
+  background-color: var(--card-background);
+  border: 1px solid var(--border-color);
+  border-radius: 0.75rem;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.recipe-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+}
+
+.category-card {
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.category-card:hover {
+  transform: scale(1.05);
+  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+}
+
+/* Focus styles for accessibility */
+.focus-ring {
+  outline: 2px solid transparent;
+  outline-offset: 2px;
+}
+
+.focus-ring:focus {
+  outline: 2px solid #4299e1;
+  outline-offset: 2px;
+}
+
+/* Button styles */
+.btn-primary {
+  @apply bg-primary-500 hover:bg-primary-600 text-white font-medium py-2 px-4 rounded-lg transition duration-300 ease-in-out transform hover:-translate-y-0.5 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-opacity-50;
+}
+
+.btn-secondary {
+  @apply bg-secondary-500 hover:bg-secondary-600 text-white font-medium py-2 px-4 rounded-lg transition duration-300 ease-in-out transform hover:-translate-y-0.5 focus:outline-none focus:ring-2 focus:ring-secondary-500 focus:ring-opacity-50;
+}
+
+.btn-accent {
+  @apply bg-accent-500 hover:bg-accent-600 text-white font-medium py-2 px-4 rounded-lg transition duration-300 ease-in-out transform hover:-translate-y-0.5 focus:outline-none focus:ring-2 focus:ring-accent-500 focus:ring-opacity-50;
+}
+
+/* Form styles */
+.form-input {
+  @apply w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent dark:bg-gray-700 dark:border-gray-600 dark:text-white;
+}
+
+.form-label {
+  @apply block text-gray-700 font-medium mb-2 dark:text-gray-300;
+}
+
+/* Alert styles */
+.alert-success {
+  @apply bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded relative dark:bg-green-800 dark:border-green-600 dark:text-green-100;
+}
+
+.alert-error {
+  @apply bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative dark:bg-red-800 dark:border-red-600 dark:text-red-100;
+}
+
+/* Rating stars */
+.rating-stars {
+  color: #fbbf24; /* amber-400 */
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .recipe-card {
+    max-width: 100%;
+  }
+  
+  .category-card {
+    width: 100%;
+    margin-bottom: 1rem;
+  }
+}
