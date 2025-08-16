@@ -1,20 +1,26 @@
 import express from 'express'
-import { dashboard, deleteUser, getAllUsers, makeAdmin, updateUser } from '../controllers/adminControllers.js';
+import { adminLogin, dashboard, deleteUser, getAllUsers, makeAdmin, updateUser } from '../controllers/adminControllers.js';
 import { createRecipe, deleteRecipe, updateRecipe } from '../controllers/adminControllers.js';
 import { isAdmin } from '../middlewere/authMiddlewere.js';
+import upload from '../config/multer.js';
 
 const adminRouter = express.Router()
 
-// User Related Routes: 
+// Admin Authentication Routes:
+adminRouter.post("/login", adminLogin);
+
+// Dashboard Route:
+adminRouter.get("/dashboard", isAdmin, dashboard);
+
+// User Management Routes:
 adminRouter.get("/all-users", isAdmin, getAllUsers);
 adminRouter.put("/update-user/:id", isAdmin, updateUser);
 adminRouter.delete("/delete-user/:id", isAdmin, deleteUser);
-adminRouter.delete("/make-admin/:id", isAdmin, makeAdmin);
-adminRouter.delete("/dashboard", isAdmin, dashboard);
+adminRouter.put("/make-admin/:id", isAdmin, makeAdmin);
 
-// Recipes Related Routes:
-adminRouter.post("/", isAdmin, createRecipe);
-adminRouter.put("/:id", isAdmin, updateRecipe);
-adminRouter.delete("/:id", isAdmin, deleteRecipe);
+// Recipe Management Routes:
+adminRouter.post("/recipes", isAdmin, upload.single('image'), createRecipe);
+adminRouter.put("/recipes/:id", isAdmin, upload.single('image'), updateRecipe);
+adminRouter.delete("/recipes/:id", isAdmin, deleteRecipe);
 
 export default adminRouter;

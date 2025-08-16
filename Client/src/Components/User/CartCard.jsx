@@ -1,7 +1,15 @@
 import React from 'react';
+import { useDispatch } from 'react-redux';
+import { removeFromCart } from '../../Store/cartSlice';
 
 const CartCard = ({ data }) => {
   const { id, img, name, price } = data;
+  const dispatch = useDispatch();
+
+  const handleRemove = () => {
+    dispatch(removeFromCart(id));
+  };
+
   return (
     <div className="card mb-3 shadow-lg rounded-3 border-0" style={{ maxWidth: '540px' }}>
       <div className="row g-0">
@@ -22,7 +30,7 @@ const CartCard = ({ data }) => {
             </p>
           </div>
           <div className="card-footer bg-light border-0 text-end">
-            <button className="btn btn-outline-danger btn-sm">Remove</button>
+            <button className="btn btn-outline-danger btn-sm" onClick={handleRemove}>Remove</button>
           </div>
         </div>
       </div>

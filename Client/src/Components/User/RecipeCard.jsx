@@ -1,6 +1,31 @@
 import React from "react";
 
 const RecipeCard = ({ recipe }) => {
+  // Function to render star ratings
+  const renderRating = (rating) => {
+    const stars = [];
+    const fullStars = Math.floor(rating);
+    const hasHalfStar = rating % 1 >= 0.5;
+    
+    for (let i = 0; i < fullStars; i++) {
+      stars.push(<span key={i} className="text-warning">★</span>);
+    }
+    
+    if (hasHalfStar) {
+      stars.push(<span key="half" className="text-warning">☆</span>);
+    }
+    
+    const emptyStars = 5 - stars.length;
+    for (let i = 0; i < emptyStars; i++) {
+      stars.push(<span key={`empty-${i}`} className="text-warning">☆</span>);
+    }
+    
+    return <div>{stars}</div>;
+  };
+
+  // Determine image source - use uploaded image if available, otherwise use default
+  const imageSrc = recipe.imageUrl ? `http://localhost:3000${recipe.imageUrl}` : recipe.img;
+
   return (
     <div className="card m-3" style={{
       width: "18rem",
@@ -11,7 +36,7 @@ const RecipeCard = ({ recipe }) => {
       boxShadow: "0 8px 16px rgba(0, 0, 0, 0.1)",
       transition: "transform 0.3s ease, box-shadow 0.3s ease",
     }}>
-      <img src={recipe.img} className="card-img-top" alt={recipe.name} style={{
+      <img src={imageSrc} className="card-img-top" alt={recipe.name} style={{
         height: "200px",
         objectFit: "cover",
       }} />
@@ -43,6 +68,13 @@ const RecipeCard = ({ recipe }) => {
         }}>
           {recipe.description}
         </p>
+        
+        {/* Rating Display */}
+        <div className="d-flex justify-content-center align-items-center mb-2">
+          {renderRating(recipe.averageRating || 0)}
+          <span className="ms-2">({recipe.ratings ? recipe.ratings.length : 0})</span>
+        </div>
+        
         <div className="d-flex justify-content-center align-items-center mt-3">
           <a href="#" className="btn" style={{
             backgroundColor: "#626F47",  // Green button
@@ -63,3 +95,4 @@ const RecipeCard = ({ recipe }) => {
 };
 
 export default RecipeCard;
+

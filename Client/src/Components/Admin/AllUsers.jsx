@@ -10,7 +10,7 @@ const AllUsers = () => {
 
   const fetchUsers = async () => {
     try {
-      const response = await axios.get("http://localhost:3000/api/users"); // ✅ Fix API URL
+      const response = await axios.get("http://localhost:3000/users"); // ✅ Fix API URL
       setUsers(response.data);
     } catch (error) {
       console.error("Error fetching users:", error);
@@ -20,7 +20,7 @@ const AllUsers = () => {
   const handleDelete = async (id) => {
     if (window.confirm("Are you sure you want to delete this user?")) {
       try {
-        await axios.delete(`http://localhost:3000/api/users/${id}`); // ✅ Fix API URL
+        await axios.delete(`http://localhost:3000/users/${id}`); // ✅ Fix API URL
         setUsers(users.filter((user) => user._id !== id));
       } catch (error) {
         console.error("Error deleting user:", error);

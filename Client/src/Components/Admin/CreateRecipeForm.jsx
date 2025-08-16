@@ -9,20 +9,61 @@ const CreateRecipeForm = () => {
     type: "Veg",
     ingredients: "",
     instructions: "",
-    cookingTime: ""
+    cookingTime: "",
+    image: null
   });
 
   const handleChange = (e) => {
-    const { name, value } = e.target;
-    setRecipe({ ...recipe, [name]: value });
+    const { name, value, files } = e.target;
+    if (name === 'image') {
+      setRecipe({ ...recipe, image: files[0] });
+    } else {
+      setRecipe({ ...recipe, [name]: value });
+    }
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log(recipe);
-    const response = await axios.post("http://localhost:3000/recipes/", recipe);
-    console.log(response);
-    alert("Recipe Created Succesfully")
+    
+    const formData = new FormData();
+    formData.append('name', recipe.name);
+    formData.append('description', recipe.description);
+    formData.append('category', recipe.category);
+    formData.append('type', recipe.type);
+    formData.append('ingredients', recipe.ingredients);
+    formData.append('instructions', recipe.instructions);
+    formData.append('cookingTime', recipe.cookingTime);
+    if (recipe.image) {
+      formData.append('image', recipe.image);
+    }
+    
+    try {
+      const token = localStorage.getItem('token');
+      const response = await axios.post("http://localhost:3000/admin/recipes", formData, {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+          'Authorization': `Bearer ${token}`
+        }
+      });
+      
+      console.log(response);
+      alert("Recipe Created Successfully");
+      
+      // Reset form
+      setRecipe({
+        name: "",
+        description: "",
+        category: "",
+        type: "Veg",
+        ingredients: "",
+        instructions: "",
+        cookingTime: "",
+        image: null
+      });
+    } catch (error) {
+      console.error("Error creating recipe:", error);
+      alert("Error creating recipe");
+    }
   };
 
   return (
@@ -65,6 +106,11 @@ const CreateRecipeForm = () => {
         <div className="mb-3">
           <label className="form-label">Cooking Time (in minutes):</label>
           <input type="number" name="cookingTime" className="form-control" value={recipe.cookingTime} onChange={handleChange} required />
+        </div>
+        
+        <div className="mb-3">
+          <label className="form-label">Recipe Image:</label>
+          <input type="file" name="image" className="form-control" onChange={handleChange} accept="image/*" />
         </div>
 
         <button type="submit" className="btn btn-primary w-100">Create Recipe</button>

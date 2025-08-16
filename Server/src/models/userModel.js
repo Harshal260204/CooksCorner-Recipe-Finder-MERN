@@ -19,11 +19,26 @@ const userSchema = mongoose.Schema(
     password: {
       type: String,
       required: true,
-      required: true,
     },
     isAdmin: {
       type: Boolean,
       default: false,
+    },
+    isVerified: {
+      type: Boolean,
+      default: false,
+    },
+    emailVerificationToken: {
+      type: String,
+    },
+    emailVerificationExpires: {
+      type: Date,
+    },
+    passwordResetToken: {
+      type: String,
+    },
+    passwordResetExpires: {
+      type: Date,
     }
   },
   { timestamps: true }

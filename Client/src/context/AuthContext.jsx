@@ -1,10 +1,30 @@
-import React from 'react'
-import { createContext,useState } from 'react'
+import React, { createContext, useState } from 'react'
 
-const AuthContext = () => {
+export const AuthContext = createContext()
+
+export const AuthProvider = ({ children }) => {
+  const [user, setUser] = useState(() => {
+    try {
+      const storedUser = localStorage.getItem("user")
+      return storedUser ? JSON.parse(storedUser) : null;
+    } catch (error) {
+      console.log("Error Passing Data : ", error);
+      return null;
+    }
+  })
+
+  const [token, setToken] = useState(() => localStorage.getItem("token") || null)
+
+  const logout = () => {
+    localStorage.removeItem("user");
+    localStorage.removeItem("token")
+    setToken(null);
+    setUser(null)
+  }
+
   return (
-    <div>AuthContext</div>
-  )
+    <AuthContext.Provider value={{ user, setUser, token, setToken, logout }}>
+      {children}
+    </AuthContext.Provider>
+    )
 }
-
-export default AuthContext

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { assets } from '../../assets/assets'
 import TopRecipes from '../../Components/User/TopRecipes'
 import { Link } from 'react-router-dom';
@@ -8,13 +8,73 @@ import mainCourseImg from '../../assets/mainCourse.jpg'
 import drinksImg from '../../assets/drinks.jpg'
 import snacksImg from '../../assets/snacks.jpg'
 import soupImg from '../../assets/soupssandwiches.jpg'
+import axios from 'axios';
 
 function Homepage() {
+  const [searchQuery, setSearchQuery] = useState('');
+  const [searchResults, setSearchResults] = useState([]);
+  const [showResults, setShowResults] = useState(false);
+
+  const handleSearch = async (e) => {
+    e.preventDefault();
+    if (!searchQuery.trim()) return;
+    
+    try {
+      const response = await axios.get(`http://localhost:3000/recipes/search?query=${searchQuery}`);
+      setSearchResults(response.data.recipes);
+      setShowResults(true);
+    } catch (error) {
+      console.error('Search error:', error);
+      setSearchResults([]);
+    }
+  };
+
   return (
     <div >
       {/* Hero Section */}
       <div>
         <img style={{ width: "100%", height: "700px" }} src={assets.car1} alt="" />
+      </div>
+
+      {/* Search Section */}
+      <div className="container mt-4">
+        <form onSubmit={handleSearch} className="d-flex justify-content-center">
+          <div className="input-group" style={{ maxWidth: '600px' }}>
+            <input
+              type="text"
+              className="form-control"
+              placeholder="Search for recipes..."
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+            />
+            <button className="btn btn-primary" type="submit">Search</button>
+          </div>
+        </form>
+        
+        {/* Search Results */}
+        {showResults && (
+          <div className="mt-4">
+            <h3>Search Results for "{searchQuery}"</h3>
+            {searchResults.length > 0 ? (
+              <div className="d-flex flex-wrap justify-content-center">
+                {searchResults.map(recipe => (
+                  <div key={recipe._id} className="card m-2" style={{ width: '18rem' }}>
+                    <div className="card-body">
+                      <h5 className="card-title">{recipe.name}</h5>
+                      <p className="card-text">{recipe.description}</p>
+                      <p className="text-muted">Category: {recipe.category}</p>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            ) : (
+              <p>No recipes found matching your search.</p>
+            )}
+            <button className="btn btn-secondary mt-3" onClick={() => setShowResults(false)}>
+              Clear Search
+            </button>
+          </div>
+        )}
       </div>
 
       {/* CATEGORIES SECTION */}

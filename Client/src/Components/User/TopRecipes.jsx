@@ -1,69 +1,71 @@
 import React from "react";
 import { assets } from "../../assets/assets";
 
-export default function RecipeCard() {
+export default function TopRecipes() {
 
   const topRecipes = [
     {
       id: 1,
       name: "Chicken Tikka Biryani",
       description: "A fragrant, spiced biryani with marinated chicken tikka pieces, layered with basmati rice.",
-      img: assets.chickenBiryani, // Updated
-      type: "Non-Veg"
+      img: assets.chickenBiryani,
+      type: "Non-Veg",
+      averageRating: 4.5,
+      ratingsCount: 120
     },
     {
       id: 2,
       name: "Paneer Tikka Masala",
       description: "A creamy and flavorful curry made with marinated paneer pieces cooked in a spiced tomato-based sauce.",
-      img: assets.paneerTikkaMasala, // Updated
-      type: "Veg"
+      img: assets.paneerTikkaMasala,
+      type: "Veg",
+      averageRating: 4.2,
+      ratingsCount: 95
     },
     {
       id: 3,
       name: "Chicken White Sauce Pasta",
       description: "A creamy, rich pasta dish with grilled chicken, cooked in a garlic-flavored white sauce.",
-      img: assets.chickenPasta, // Updated
-      type: "Non-Veg"
+      img: assets.chickenPasta,
+      type: "Non-Veg",
+      averageRating: 4.0,
+      ratingsCount: 87
     },
     {
       id: 4,
       name: "Shahi Paneer",
       description: "A royal and creamy paneer curry made with rich ingredients like cream, cashews, and aromatic spices.",
-      img: assets.shahiPaneer, // Updated
-      type: "Veg"
-    },
-    {
-      id: 5,
-      name: "Chicken Crispy",
-      description: "A popular appetizer made with crispy fried chicken coated in a spicy, tangy sauce.",
-      img: assets.chickenBiryani, // Updated
-      type: "Non-Veg"
-    },
-    {
-      id: 6,
-      name: "Paneer Biryani",
-      description: "A delightful, layered biryani made with marinated paneer and aromatic basmati rice, perfect for vegetarians.",
-      img: assets.paneerBiryani, // Updated
-      type: "Veg"
-    },
-    {
-      id: 7,
-      name: "Chole Masala",
-      description: "A spicy, flavorful North Indian chickpea curry, packed with robust spices and perfect with rice or naan.",
-      img: assets.choleMasala, // Updated
-      type: "Veg"
-    },
-    {
-      id: 8,
-      name: "Gulab Jamun",
-      description: "A popular Indian dessert made of soft, round, deep-fried balls soaked in sweet, aromatic sugar syrup.",
-      img: assets.gulabjamun, // Updated
-      type: "Dessert"
+      img: assets.shahiPaneer,
+      type: "Veg",
+      averageRating: 4.7,
+      ratingsCount: 142
     }
   ];
 
+  // Function to render star ratings
+  const renderRating = (rating) => {
+    const stars = [];
+    const fullStars = Math.floor(rating);
+    const hasHalfStar = rating % 1 >= 0.5;
+    
+    for (let i = 0; i < fullStars; i++) {
+      stars.push(<span key={i} className="text-warning">★</span>);
+    }
+    
+    if (hasHalfStar) {
+      stars.push(<span key="half" className="text-warning">☆</span>);
+    }
+    
+    const emptyStars = 5 - stars.length;
+    for (let i = 0; i < emptyStars; i++) {
+      stars.push(<span key={`empty-${i}`} className="text-warning">☆</span>);
+    }
+    
+    return <div>{stars}</div>;
+  };
+
   return (
-    <div className="d-flex flex-wrap justify-content-center content" style={{}}>
+    <div className="d-flex flex-wrap justify-content-center content">
       {topRecipes.map((recipe) => (
         <div
           className="card m-3"
@@ -72,7 +74,7 @@ export default function RecipeCard() {
             border: "none",
             borderRadius: "12px",
             overflow: "hidden",
-            backgroundColor: "#DDEB9D",  // Card background color
+            backgroundColor: "#DDEB9D",
             boxShadow: "0 8px 16px rgba(0, 0, 0, 0.1)",
             transition: "transform 0.3s ease, box-shadow 0.3s ease",
           }}
@@ -92,7 +94,7 @@ export default function RecipeCard() {
             className="card-body"
             style={{
               padding: "1.2rem",
-              backgroundColor: "#DDEB9D",  // Updated background color to match the card
+              backgroundColor: "#DDEB9D",
               color: "#2b2d42",
             }}
           >
@@ -114,9 +116,16 @@ export default function RecipeCard() {
             >
               {recipe.description}
             </p>
+            
+            {/* Rating Display */}
+            <div className="d-flex justify-content-center align-items-center mb-2">
+              {renderRating(recipe.averageRating || 0)}
+              <span className="ms-2">({recipe.ratingsCount || 0})</span>
+            </div>
+            
             <div className="d-flex justify-content-center align-items-center mt-3">
               <a href="#" className="btn" style={{
-                backgroundColor: "#626F47",  // Green button
+                backgroundColor: "#626F47",
                 color: "#fff",
                 borderRadius: "25px",
                 padding: "0.5rem 1rem",
@@ -132,7 +141,5 @@ export default function RecipeCard() {
         </div>
       ))}
     </div>
-
-
   );
 }
